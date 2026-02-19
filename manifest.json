@@ -1,11 +1,12 @@
-{
-  "name": "FFTweaks",
-  "version_number": "0.1.0",
-  "website_url": "",
-  "description": "Compatibility bundle containing FFT.TrueHardcore and FFT.KnivesMaster plugins.",
-  "dependencies": [
-    "BepInEx-BepInExPack_Outward-5.4.19",
-    "IggyTheMad-TrueHardcore-3.2.1",
-    "stormcancer-Knives_Master-1.4.0"
-  ]
+﻿{
+    "name":  "FFTweaks",
+    "version_number":  "0.1.0",
+    "website_url":  "",
+    "description":  "Compatibility bundle containing FFT.TrueHardcore and FFT.KnivesMaster plugins.",
+    "dependencies":  [
+                         "BepInEx-BepInExPack_Outward-5.4.19",
+                         "IggyTheMad-TrueHardcore-3.2.1",
+                         "stormcancer-Knives_Master-4.0.6",
+                         "Vheos-VheosModPack-2.1.0"
+                     ]
 }

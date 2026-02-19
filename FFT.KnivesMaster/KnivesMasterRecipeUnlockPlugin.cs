@@ -15,6 +15,7 @@ namespace FFT.KnivesMaster
 		private const string PluginGuid = "fierrof.fft.knivesmaster";
 		private const string PluginName = "FFT.KnivesMaster";
 		private const string PluginVersion = "0.1.0";
+		private const float RetryIntervalSeconds = 10f;
 
 		private static readonly string[] KnivesMasterMarkers =
 		{
@@ -30,45 +31,57 @@ namespace FFT.KnivesMaster
 		};
 
 		private float _nextAttemptTime;
-		private bool _startupUnlockAttempted;
+		private bool _unlockCompleted;
+		private static KnivesMasterRecipeUnlockPlugin Instance;
 
 		private void Awake()
 		{
+			Instance = this;
 			new Harmony(PluginGuid).PatchAll();
 			Logger.LogInfo($"{PluginName} loaded");
+			TryUnlockRecipes("Awake");
 		}
 
 		private void Update()
 		{
-			if (_startupUnlockAttempted || Time.unscaledTime < _nextAttemptTime)
+			if (_unlockCompleted || Time.unscaledTime < _nextAttemptTime)
 			{
 				return;
 			}
 
-			_nextAttemptTime = Time.unscaledTime + 5f;
+			_nextAttemptTime = Time.unscaledTime + RetryIntervalSeconds;
+			TryUnlockRecipes("UpdateRetry");
+		}
+
+		private void TryUnlockRecipes(string source)
+		{
+			if (_unlockCompleted)
+			{
+				return;
+			}
 
 			if (!IsKnivesMasterInstalled())
 			{
 				return;
 			}
 
-			object localCharacter = TryGetLocalCharacter();
-			if (localCharacter == null)
+			List<object> localCharacters = GetLocalCharacters();
+			if (localCharacters.Count == 0)
 			{
 				return;
 			}
 
 			int matchedRecipes = 0;
-			int learnedRecipes = LearnKnivesMasterDaggerRecipes(localCharacter, ref matchedRecipes);
+			int learnedRecipes = LearnKnivesMasterDaggerRecipes(localCharacters, ref matchedRecipes);
 
 			if (matchedRecipes == 0)
 			{
-				Logger.LogWarning("Knives Master detected, but no dagger recipe assets were matched yet.");
+				Logger.LogWarning($"[{source}] Knives Master detected, but no dagger recipes matched in RecipeManager yet.");
 				return;
 			}
 
-			_startupUnlockAttempted = true;
-			Logger.LogInfo($"Knives Master dagger recipes processed on login. Matched: {matchedRecipes}, learned now: {learnedRecipes}.");
+			_unlockCompleted = true;
+			Logger.LogInfo($"[{source}] Knives Master dagger recipes processed. Matched: {matchedRecipes}, learned now: {learnedRecipes}.");
 		}
 
 		private static bool IsKnivesMasterInstalled()
@@ -82,7 +95,63 @@ namespace FFT.KnivesMaster
 			});
 		}
 
-		private static object TryGetLocalCharacter()
+		private static List<object> GetLocalCharacters()
+		{
+			List<object> result = new List<object>();
+
+			foreach (object playerSystem in EnumerateLocalPlayerSystems())
+			{
+				object controlledCharacter = GetMemberValue(playerSystem.GetType(), playerSystem, "ControlledCharacter");
+				if (controlledCharacter != null)
+				{
+					result.Add(controlledCharacter);
+				}
+			}
+
+			if (result.Count > 0)
+			{
+				return result;
+			}
+
+			object fallbackCharacter = TryGetFirstLocalCharacter();
+			if (fallbackCharacter != null)
+			{
+				result.Add(fallbackCharacter);
+			}
+
+			return result;
+		}
+
+		private static IEnumerable<object> EnumerateLocalPlayerSystems()
+		{
+			Type globalType = FindTypeByName("Global");
+			object lobby = globalType == null ? null : GetMemberValue(globalType, null, "Lobby");
+			if (lobby == null)
+			{
+				yield break;
+			}
+
+			object players = GetMemberValue(lobby.GetType(), lobby, "PlayersInLobby");
+			if (!(players is IEnumerable enumerable))
+			{
+				yield break;
+			}
+
+			foreach (object playerSystem in enumerable)
+			{
+				if (playerSystem == null)
+				{
+					continue;
+				}
+
+				if (GetBoolMember(playerSystem, "IsLocalPlayer"))
+				{
+					yield return playerSystem;
+				}
+			}
+		}
+
+		private static object TryGetFirstLocalCharacter()
 		{
 			Type characterManagerType = FindTypeByName("CharacterManager");
 			if (characterManagerType == null)
@@ -105,37 +174,65 @@ namespace FFT.KnivesMaster
 				?? GetMemberValue(characterManagerType, manager, "LocalCharacter");
 		}
 
-		private static int LearnKnivesMasterDaggerRecipes(object localCharacter, ref int matchedRecipes)
+		private static int LearnKnivesMasterDaggerRecipes(IReadOnlyList<object> localCharacters, ref int matchedRecipes)
 		{
 			Type recipeType = FindTypeByName("Recipe");
-			if (recipeType == null)
+			Type recipeManagerType = FindTypeByName("RecipeManager");
+			if (recipeType == null || recipeManagerType == null)
 			{
 				return 0;
 			}
 
-			Array allRecipes = Resources.FindObjectsOfTypeAll(recipeType);
+			object recipeManager = GetMemberValue(recipeManagerType, null, "Instance")
+				?? GetMemberValue(recipeManagerType, null, "m_instance")
+				?? GetMemberValue(recipeManagerType, null, "instance");
+			if (recipeManager == null)
+			{
+				return 0;
+			}
+
+			object recipesMap = GetMemberValue(recipeManagerType, recipeManager, "m_recipes")
+				?? GetMemberValue(recipeManagerType, recipeManager, "Recipes");
+			if (!(recipesMap is IEnumerable entries))
+			{
+				return 0;
+			}
+
 			int learnedRecipes = 0;
 
-			foreach (object recipe in allRecipes)
+			foreach (object entry in entries)
 			{
-				if (!IsKnivesMasterDaggerRecipe(recipe, recipeType))
+				if (entry == null)
+				{
+					continue;
+				}
+
+				Type entryType = entry.GetType();
+				string recipeUid = GetMemberValue(entryType, entry, "Key")?.ToString();
+				object recipe = GetMemberValue(entryType, entry, "Value");
+
+				if (!IsKnivesMasterDaggerRecipe(recipeUid, recipe, recipeType))
 				{
 					continue;
 				}
 
 				matchedRecipes++;
-				if (TryLearnRecipe(localCharacter, recipe, recipeType))
+				foreach (object localCharacter in localCharacters)
 				{
-					learnedRecipes++;
+					if (TryLearnRecipe(localCharacter, recipeUid, recipe, recipeType))
+					{
+						learnedRecipes++;
+					}
 				}
 			}
 
 			return learnedRecipes;
 		}
 
-		private static bool IsKnivesMasterDaggerRecipe(object recipe, Type recipeType)
+		private static bool IsKnivesMasterDaggerRecipe(string recipeUid, object recipe, Type recipeType)
 		{
 			List<string> parts = new List<string>();
+			parts.Add(recipeUid);
 
 			if (recipe is UnityEngine.Object unityObject)
 			{
@@ -148,66 +245,79 @@ namespace FFT.KnivesMaster
 			parts.Add(GetStringMember(recipeType, recipe, "m_name"));
 			parts.Add(GetStringMember(recipeType, recipe, "m_recipeName"));
 
-			string key = string.Join(" | ", parts.Where(p => !string.IsNullOrWhiteSpace(p))).ToLowerInvariant();
-			if (key.Length == 0 || !key.Contains("dagger"))
+			string key = string.Join(" | ", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
+			if (key.Length == 0)
 			{
 				return false;
 			}
 
-			return KnivesMasterMarkers.Any(marker => key.Contains(marker));
+			string normalized = Normalize(key);
+			if (KnivesMasterMarkers.Any(marker => normalized.Contains(Normalize(marker))))
+			{
+				return true;
+			}
+
+			bool knivesMasterSignature = normalized.Contains("knivesmaster") || normalized.Contains("stormcancer") || normalized.Contains("colorpickerknife");
+			bool daggerOrKnife = normalized.Contains("dagger") || normalized.Contains("knife");
+			return knivesMasterSignature && daggerOrKnife;
 		}
 
-		private static bool TryLearnRecipe(object localCharacter, object recipe, Type recipeType)
+		private static bool TryLearnRecipe(object localCharacter, string recipeUid, object recipe, Type recipeType)
 		{
-			Type characterType = localCharacter.GetType();
-			MethodInfo[] methods = characterType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-			foreach (MethodInfo method in methods)
+			object inventory = GetMemberValue(localCharacter.GetType(), localCharacter, "Inventory");
+			if (inventory == null)
 			{
-				if (method.Name.IndexOf("learn", StringComparison.OrdinalIgnoreCase) < 0)
-				{
-					continue;
-				}
+				return false;
+			}
 
-				ParameterInfo[] parameters = method.GetParameters();
-				if (parameters.Length != 1 || !parameters[0].ParameterType.IsAssignableFrom(recipeType))
-				{
-					continue;
-				}
+			object recipeKnowledge = GetMemberValue(inventory.GetType(), inventory, "RecipeKnowledge");
+			if (recipeKnowledge == null)
+			{
+				return false;
+			}
 
-				object result = method.Invoke(localCharacter, new[] { recipe });
+			if (!string.IsNullOrWhiteSpace(recipeUid) && IsRecipeAlreadyLearned(recipeKnowledge, recipeUid))
+			{
+				return false;
+			}
+
+			MethodInfo learnRecipeMethod = recipeKnowledge.GetType()
+				.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+				.FirstOrDefault(m => string.Equals(m.Name, "LearnRecipe", StringComparison.OrdinalIgnoreCase) && m.GetParameters().Length == 1 && recipe != null && m.GetParameters()[0].ParameterType.IsAssignableFrom(recipeType));
+
+			if (learnRecipeMethod != null)
+			{
+				object result = learnRecipeMethod.Invoke(recipeKnowledge, new[] { recipe });
 				return result is bool b ? b : true;
 			}
 
-			object recipeUid = GetMemberValue(recipeType, recipe, "UID")
-				?? GetMemberValue(recipeType, recipe, "RecipeID")
-				?? GetMemberValue(recipeType, recipe, "m_recipeID");
+			MethodInfo learnRecipeUidMethod = recipeKnowledge.GetType()
+				.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+				.FirstOrDefault(m => string.Equals(m.Name, "LearnRecipe", StringComparison.OrdinalIgnoreCase) && m.GetParameters().Length == 1 && m.GetParameters()[0].ParameterType == typeof(string));
 
-			foreach (MethodInfo method in methods)
+			if (learnRecipeUidMethod != null && !string.IsNullOrWhiteSpace(recipeUid))
 			{
-				if (method.Name.IndexOf("learnrecipe", StringComparison.OrdinalIgnoreCase) < 0)
-				{
-					continue;
-				}
-
-				ParameterInfo[] parameters = method.GetParameters();
-				if (parameters.Length != 1 || recipeUid == null)
-				{
-					continue;
-				}
-
-				try
-				{
-					object converted = Convert.ChangeType(recipeUid, parameters[0].ParameterType);
-					object result = method.Invoke(localCharacter, new[] { converted });
-					return result is bool b ? b : true;
-				}
-				catch
-				{
-				}
+				object result = learnRecipeUidMethod.Invoke(recipeKnowledge, new object[] { recipeUid });
+				return result is bool b ? b : true;
 			}
 
 			return false;
+		}
+
+		private static bool IsRecipeAlreadyLearned(object recipeKnowledge, string recipeUid)
+		{
+			MethodInfo method = recipeKnowledge.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+				.FirstOrDefault(m => string.Equals(m.Name, "IsRecipeLearned", StringComparison.OrdinalIgnoreCase)
+					&& m.GetParameters().Length == 1
+					&& m.GetParameters()[0].ParameterType == typeof(string));
+
+			if (method == null)
+			{
+				return false;
+			}
+
+			object result = method.Invoke(recipeKnowledge, new object[] { recipeUid });
+			return result is bool b && b;
 		}
 
 		private static Type FindTypeByName(string typeName)
@@ -230,6 +340,12 @@ namespace FFT.KnivesMaster
 			return method?.Invoke(instance, null);
 		}
 
+		private static bool GetBoolMember(object instance, string memberName)
+		{
+			object value = GetMemberValue(instance.GetType(), instance, memberName);
+			return value is bool b && b;
+		}
+
 		private static object GetMemberValue(Type ownerType, object instance, string memberName)
 		{
 			PropertyInfo property = ownerType.GetProperty(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
@@ -246,6 +362,32 @@ namespace FFT.KnivesMaster
 		{
 			object value = GetMemberValue(ownerType, instance, memberName);
 			return value?.ToString();
+		}
+
+		private static string Normalize(string value)
+		{
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				return string.Empty;
+			}
+
+			char[] chars = value.Where(char.IsLetterOrDigit).Select(char.ToLowerInvariant).ToArray();
+			return new string(chars);
+		}
+
+		[HarmonyPatch]
+		private static class GameplayResumePatch
+		{
+			private static MethodBase TargetMethod()
+			{
+				Type networkLoaderType = FindTypeByName("NetworkLevelLoader");
+				return networkLoaderType?.GetMethod("UnPauseGameplay", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+			}
+
+			private static void Postfix()
+			{
+				Instance?.TryUnlockRecipes("NetworkLevelLoader.UnPauseGameplay");
+			}
 		}
 	}
 }

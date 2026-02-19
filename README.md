@@ -1,8 +1,8 @@
 # FFTweaks
 
-Mod orchestrator for my Outward DE modpack.
+Compatibility and integration package for Outward DE.
 
-This repository is the central package for the modpack and contains its custom plugin modifications and configuration assets.
+`FFTweaks` bundles custom fixes used in my modpack into a single Thunderstore package.
 
 ## What it does
 
@@ -10,11 +10,18 @@ This repository is the central package for the modpack and contains its custom p
 	- `FFT.TrueHardcore.dll`: keeps TrueHardcore installed and active while disabling only its combat loot animation injection (`SpellCastAnim` calls in its loot interaction patch).
 	- `FFT.KnivesMaster.dll`: auto-learns Knives Master dagger recipes when a character loads.
 
+## Included plugins
+
+- `FFT.TrueHardcore.dll`
+- `FFT.KnivesMaster.dll`
+
+## Dependencies
+
+- `BepInEx-BepInExPack_Outward`
+- `IggyTheMad-TrueHardcore`
+- `stormcancer-Knives_Master`
+- `Vheos-VheosModPack`
+
 ## Notes
 
-- Both fixes are implemented as separate BepInEx + Harmony plugins distributed together as one `FFTweaks` release.
-- No edits to `HardcoreRebalance.dll` are required.
-
-## Release workflow
-
-- `CHANGELOG.md` is updated only when a release version is ready.
+- No direct edits to `HardcoreRebalance.dll` are required.
