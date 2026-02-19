@@ -30,9 +30,14 @@ $projects = @(
         DllName = "FFT.TrueHardcore.dll"
     },
     @{
-        Name = "FFT.KnivesMaster"
-        ProjectFile = "$solutionDir\FFT.KnivesMaster\FFT.KnivesMaster.csproj"
-        DllName = "FFT.KnivesMaster.dll"
+        Name = "FFT.Knives_Master"
+        ProjectFile = "$solutionDir\FFT.Knives_Master\FFT.Knives_Master.csproj"
+        DllName = "FFT.Knives_Master.dll"
+    },
+    @{
+        Name = "FFT.Classfixes_Part_1"
+        ProjectFile = "$solutionDir\FFT.Classfixes_Part_1\FFT.Classfixes_Part_1.csproj"
+        DllName = "FFT.Classfixes_Part_1.dll"
     }
 )
 

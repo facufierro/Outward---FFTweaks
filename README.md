@@ -8,12 +8,13 @@ Compatibility and integration package for Outward DE.
 
 - Ships multiple plugin DLLs in one mod package:
 	- `FFT.TrueHardcore.dll`: keeps TrueHardcore installed and active while disabling only its combat loot animation injection (`SpellCastAnim` calls in its loot interaction patch).
-	- `FFT.KnivesMaster.dll`: auto-learns Knives Master dagger recipes when a character loads.
+	- `FFT.Knives_Master.dll`: auto-learns Knives Master dagger recipes when a character loads.
 
 ## Included plugins
 
 - `FFT.TrueHardcore.dll`
-- `FFT.KnivesMaster.dll`
+- `FFT.Knives_Master.dll`
+- `FFT.Classfixes_Part_1.dll`
 
 ## Dependencies
 

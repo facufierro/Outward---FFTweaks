@@ -3,8 +3,8 @@
     <TargetFramework>net472</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
-    <AssemblyName>FFT.KnivesMaster</AssemblyName>
-    <RootNamespace>FFT.KnivesMaster</RootNamespace>
+    <AssemblyName>FFT.Knives_Master</AssemblyName>
+    <RootNamespace>FFT.Knives_Master</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
