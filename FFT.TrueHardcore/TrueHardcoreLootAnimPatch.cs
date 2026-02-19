@@ -6,7 +6,7 @@ using HarmonyLib;
 
 namespace FFT.TrueHardcore
 {
-	[BepInPlugin("fierrof.fft.truehardcore", "FFT.TrueHardcore", "0.1.0")]
+	[BepInPlugin("fierrof.fft.truehardcore", "FFT.TrueHardcore", "1.0.0")]
 	public class TrueHardcoreLootAnimPatchPlugin : BaseUnityPlugin
 	{
 		private void Awake()

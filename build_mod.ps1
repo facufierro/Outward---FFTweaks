@@ -21,6 +21,7 @@ $publishDir = "$solutionDir\bin\Debug\publish"
 $outwardManagedPath = "D:\Games\Steam\steamapps\common\Outward\Outward_Data\Managed"
 $bepInExCorePath = "c:\Users\fierr\AppData\Roaming\r2modmanPlus-local\OutwardDe\profiles\Classfixes\BepInEx\core"
 $manifestPath = "$solutionDir\manifest.json"
+$devStatePath = "$solutionDir\.dev-version.json"
 
 $projects = @(
     @{
@@ -84,23 +85,76 @@ function Get-BumpedVersion([string]$currentVersion, [string]$bumpType) {
     return "$major.$minor.$patch"
 }
 
+function Get-NextDevVersion([string]$releaseVersion) {
+    [void](Get-SemVerParts -value $releaseVersion)
+
+    $baseVersion = $releaseVersion
+    if (Test-Path $devStatePath) {
+        $state = Get-Content $devStatePath | ConvertFrom-Json
+        if ($state -and $state.release_version -eq $releaseVersion -and -not [string]::IsNullOrWhiteSpace($state.dev_version)) {
+            $baseVersion = $state.dev_version
+        }
+    }
+
+    $nextDevVersion = Get-BumpedVersion -currentVersion $baseVersion -bumpType "patch"
+
+    $nextState = [PSCustomObject]@{
+        release_version = $releaseVersion
+        dev_version = $nextDevVersion
+        updated_utc = (Get-Date).ToUniversalTime().ToString("o")
+    }
+    $nextState | ConvertTo-Json -Depth 5 | Set-Content -Path $devStatePath -Encoding UTF8
+
+    return $nextDevVersion
+}
+
+function Ensure-ManifestAuthor($manifest) {
+    if ([string]::IsNullOrWhiteSpace($manifest.author_name)) {
+        $manifest | Add-Member -NotePropertyName author_name -NotePropertyValue "fierrof" -Force
+    }
+
+    return $manifest
+}
+
 function Invoke-PackageBuild($manifest, [string]$channel) {
+    $manifest = Ensure-ManifestAuthor -manifest $manifest
+
     $releaseVersion = $manifest.version_number
-    $packageVersion = if ($channel -eq "release") {
-        $releaseVersion
+    [void](Get-SemVerParts -value $releaseVersion)
+
+    $packageVersion = if ($channel -eq "dev") {
+        Get-NextDevVersion -releaseVersion $releaseVersion
     } else {
-        "$releaseVersion-dev.$(Get-Date -Format yyyyMMddHHmmss)"
+        $releaseVersion
     }
 
     $modName = $manifest.name
-    $author = "fierrof"
+    $author = $manifest.author_name
     $zipName = "$author-$modName-$packageVersion.zip"
+    $channelBinDir = Join-Path $binDir $channel
 
     Write-Host "Build channel: $channel"
+    Write-Host "Release version: $releaseVersion"
     Write-Host "Package version: $packageVersion"
 
     Write-Host "Cleaning bin and obj folders..."
-    Get-ChildItem -Path $solutionDir -Include bin,obj -Recurse | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+    foreach ($project in $projects) {
+        $projectDir = Split-Path $project.ProjectFile -Parent
+        $projectBin = Join-Path $projectDir "bin"
+        $projectObj = Join-Path $projectDir "obj"
+
+        if (Test-Path $projectBin) {
+            Remove-Item $projectBin -Recurse -Force -ErrorAction SilentlyContinue
+        }
+
+        if (Test-Path $projectObj) {
+            Remove-Item $projectObj -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    if (Test-Path $publishDir) {
+        Remove-Item $publishDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
 
     Write-Host "Building and publishing projects..."
     foreach ($project in $projects) {
@@ -117,6 +171,7 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     }
 
     $buildManifest = [PSCustomObject]@{
+        author_name = $author
         name = $manifest.name
         version_number = $packageVersion
         website_url = $manifest.website_url
@@ -141,19 +196,22 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     }
 
     Write-Host "Preparing output directory..."
-    if (-not (Test-Path $binDir)) {
-        New-Item -ItemType Directory -Path $binDir -Force | Out-Null
+    if (-not (Test-Path $channelBinDir)) {
+        New-Item -ItemType Directory -Path $channelBinDir -Force | Out-Null
     }
 
     Write-Host "Zipping to $zipName ..."
-    $zipPath = "$binDir\$zipName"
-    if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+    $zipPath = "$channelBinDir\$zipName"
+    if (Test-Path $zipPath) {
+        Remove-Item $zipPath -Force
+    }
     Compress-Archive -Path "$publishDir\*" -DestinationPath $zipPath
 
     Write-Host "Build complete: $zipPath"
 }
 
 $manifest = Get-Manifest
+$manifest = Ensure-ManifestAuthor -manifest $manifest
 
 switch ($Action) {
     "build" {

@@ -1,6 +1,7 @@
 ﻿{
+    "author_name":  "fierrof",
     "name":  "FFTweaks",
-    "version_number":  "0.1.0",
+    "version_number":  "1.0.0",
     "website_url":  "",
     "description":  "Compatibility bundle containing FFT.TrueHardcore and FFT.KnivesMaster plugins.",
     "dependencies":  [

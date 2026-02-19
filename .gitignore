@@ -6,3 +6,4 @@
 *.user
 
 FFTweaks.code-workspace
+.dev-version.json

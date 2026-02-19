@@ -14,7 +14,7 @@ namespace FFT.KnivesMaster
 	{
 		private const string PluginGuid = "fierrof.fft.knivesmaster";
 		private const string PluginName = "FFT.KnivesMaster";
-		private const string PluginVersion = "0.1.0";
+		private const string PluginVersion = "1.0.0";
 		private const float RetryIntervalSeconds = 10f;
 
 		private static readonly string[] KnivesMasterMarkers =
@@ -60,28 +60,35 @@ namespace FFT.KnivesMaster
 				return;
 			}
 
-			if (!IsKnivesMasterInstalled())
+			try
 			{
-				return;
-			}
+				if (!IsKnivesMasterInstalled())
+				{
+					return;
+				}
 
-			List<object> localCharacters = GetLocalCharacters();
-			if (localCharacters.Count == 0)
+				List<object> localCharacters = GetLocalCharacters();
+				if (localCharacters.Count == 0)
+				{
+					return;
+				}
+
+				int matchedRecipes = 0;
+				int learnedRecipes = LearnKnivesMasterDaggerRecipes(localCharacters, ref matchedRecipes);
+
+				if (matchedRecipes == 0)
+				{
+					Logger.LogWarning($"[{source}] Knives Master detected, but no dagger recipes matched yet.");
+					return;
+				}
+
+				_unlockCompleted = true;
+				Logger.LogInfo($"[{source}] Knives Master dagger recipes processed. Matched: {matchedRecipes}, learned now: {learnedRecipes}.");
+			}
+			catch (Exception ex)
 			{
-				return;
+				Logger.LogWarning($"[{source}] Recipe unlock attempt failed: {ex.GetType().Name}: {ex.Message}");
 			}
-
-			int matchedRecipes = 0;
-			int learnedRecipes = LearnKnivesMasterDaggerRecipes(localCharacters, ref matchedRecipes);
-
-			if (matchedRecipes == 0)
-			{
-				Logger.LogWarning($"[{source}] Knives Master detected, but no dagger recipes matched in RecipeManager yet.");
-				return;
-			}
-
-			_unlockCompleted = true;
-			Logger.LogInfo($"[{source}] Knives Master dagger recipes processed. Matched: {matchedRecipes}, learned now: {learnedRecipes}.");
 		}
 
 		private static bool IsKnivesMasterInstalled()
@@ -177,39 +184,29 @@ namespace FFT.KnivesMaster
 		private static int LearnKnivesMasterDaggerRecipes(IReadOnlyList<object> localCharacters, ref int matchedRecipes)
 		{
 			Type recipeType = FindTypeByName("Recipe");
-			Type recipeManagerType = FindTypeByName("RecipeManager");
-			if (recipeType == null || recipeManagerType == null)
+			if (recipeType == null)
 			{
 				return 0;
 			}
 
-			object recipeManager = GetMemberValue(recipeManagerType, null, "Instance")
-				?? GetMemberValue(recipeManagerType, null, "m_instance")
-				?? GetMemberValue(recipeManagerType, null, "instance");
-			if (recipeManager == null)
-			{
-				return 0;
-			}
-
-			object recipesMap = GetMemberValue(recipeManagerType, recipeManager, "m_recipes")
-				?? GetMemberValue(recipeManagerType, recipeManager, "Recipes");
-			if (!(recipesMap is IEnumerable entries))
+			Array allRecipes = Resources.FindObjectsOfTypeAll(recipeType);
+			if (allRecipes == null || allRecipes.Length == 0)
 			{
 				return 0;
 			}
 
 			int learnedRecipes = 0;
 
-			foreach (object entry in entries)
+			foreach (object recipe in allRecipes)
 			{
-				if (entry == null)
+				if (recipe == null)
 				{
 					continue;
 				}
 
-				Type entryType = entry.GetType();
-				string recipeUid = GetMemberValue(entryType, entry, "Key")?.ToString();
-				object recipe = GetMemberValue(entryType, entry, "Value");
+				string recipeUid = GetStringMember(recipeType, recipe, "UID")
+					?? GetStringMember(recipeType, recipe, "RecipeID")
+					?? GetStringMember(recipeType, recipe, "m_recipeID");
 
 				if (!IsKnivesMasterDaggerRecipe(recipeUid, recipe, recipeType))
 				{
