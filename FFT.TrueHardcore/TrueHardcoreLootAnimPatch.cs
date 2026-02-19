@@ -1,97 +1,70 @@
 using System;
-using System.Linq;
 using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
 namespace FFT.TrueHardcore
 {
+	[BepInDependency("com.iggy.hardcorere", BepInDependency.DependencyFlags.HardDependency)]
 	[BepInPlugin("fierrof.fft.truehardcore", "FFT.TrueHardcore", "1.0.0")]
 	public class TrueHardcoreLootAnimPatchPlugin : BaseUnityPlugin
 	{
+		private const string TrueHardcoreHarmonyId = "com.iggy.hardcorere";
+		private Harmony _harmony;
+
 		private void Awake()
 		{
-			new Harmony("fierrof.fft.truehardcore").PatchAll();
+			_harmony = new Harmony("fierrof.fft.truehardcore");
+			_harmony.PatchAll();
+			DisableTrueHardcoreLootPrefix();
 			Logger.LogInfo("FFT.TrueHardcore loaded");
 		}
-	}
 
-	[HarmonyPatch]
-	public static class DisableCombatLootAnimationInjection
-	{
-		public static MethodBase TargetMethod()
+		private void DisableTrueHardcoreLootPrefix()
 		{
-			Assembly assembly = AppDomain.CurrentDomain.GetAssemblies()
-				.FirstOrDefault(a => string.Equals(a.GetName().Name, "HardcoreRebalance", StringComparison.OrdinalIgnoreCase));
-			if (assembly == null)
+			MethodBase target = AccessTools.Method(typeof(InteractionTriggerBase), "TryActivateBasicAction", new Type[]
 			{
-				return null;
+				typeof(Character),
+				typeof(int)
+			});
+
+			if (target == null)
+			{
+				Logger.LogError("Failed to find InteractionTriggerBase.TryActivateBasicAction(Character,int) target method.");
+				return;
 			}
 
-			Type patchType = assembly.GetType("HardcoreRebalance.CombatAnims+InteractionTriggerBase_TryActivateBasicAction", false);
-			return patchType?.GetMethod("Prefix", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-		}
-
-		public static bool Prefix(object __instance, object _character)
-		{
-			if (_character == null)
+			Patches patches = Harmony.GetPatchInfo(target);
+			if (patches == null || patches.Prefixes == null || patches.Prefixes.Count == 0)
 			{
-				return true;
+				Logger.LogWarning("No prefixes found on TryActivateBasicAction; nothing to disable.");
+				return;
 			}
 
-			if (!GetBoolMember(_character, "IsLocalPlayer") || !GetBoolMember(_character, "InCombat"))
+			int removed = 0;
+			for (int i = patches.Prefixes.Count - 1; i >= 0; i--)
 			{
-				return true;
+				var prefix = patches.Prefixes[i];
+				if (!string.Equals(prefix.owner, TrueHardcoreHarmonyId, StringComparison.Ordinal))
+				{
+					continue;
+				}
+
+				if (prefix.PatchMethod == null)
+				{
+					continue;
+				}
+
+				if (!string.Equals(prefix.PatchMethod.DeclaringType?.FullName, "HardcoreRebalance.CombatAnims+InteractionTriggerBase_TryActivateBasicAction", StringComparison.Ordinal))
+				{
+					continue;
+				}
+
+				_harmony.Unpatch(target, prefix.PatchMethod);
+				removed++;
 			}
 
-			if (!IsLootInteraction(__instance))
-			{
-				return true;
-			}
-
-			return false;
-		}
-
-		private static bool IsLootInteraction(object interactionTriggerBase)
-		{
-			if (interactionTriggerBase == null)
-			{
-				return false;
-			}
-
-			object triggerManager = GetMemberValue(interactionTriggerBase.GetType(), interactionTriggerBase, "CurrentTriggerManager");
-			if (triggerManager == null || !string.Equals(triggerManager.GetType().Name, "InteractionActivator", StringComparison.Ordinal))
-			{
-				return false;
-			}
-
-			object basicInteraction = GetMemberValue(triggerManager.GetType(), triggerManager, "BasicInteraction");
-			if (basicInteraction == null)
-			{
-				return false;
-			}
-
-			string interactionType = basicInteraction.GetType().Name;
-			return string.Equals(interactionType, "InteractionOpenContainer", StringComparison.Ordinal)
-				|| string.Equals(interactionType, "InteractionTake", StringComparison.Ordinal);
-		}
-
-		private static bool GetBoolMember(object instance, string memberName)
-		{
-			object value = GetMemberValue(instance.GetType(), instance, memberName);
-			return value is bool b && b;
-		}
-
-		private static object GetMemberValue(Type ownerType, object instance, string memberName)
-		{
-			PropertyInfo property = ownerType.GetProperty(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-			if (property != null)
-			{
-				return property.GetValue(instance);
-			}
-
-			FieldInfo field = ownerType.GetField(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-			return field?.GetValue(instance);
+			Logger.LogInfo($"Disabled TrueHardcore loot interaction prefix patches: {removed}");
 		}
 	}
 }
