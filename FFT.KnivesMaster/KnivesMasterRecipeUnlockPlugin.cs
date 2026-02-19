@@ -15,7 +15,7 @@ namespace FFT.KnivesMaster
 		private const string PluginGuid = "fierrof.fft.knivesmaster";
 		private const string PluginName = "FFT.KnivesMaster";
 		private const string PluginVersion = "1.0.0";
-		private const float RetryIntervalSeconds = 10f;
+		private const float RetryIntervalSeconds = 20f;
 
 		private static readonly string[] KnivesMasterMarkers =
 		{
@@ -31,7 +31,7 @@ namespace FFT.KnivesMaster
 		};
 
 		private float _nextAttemptTime;
-		private bool _unlockCompleted;
+		private bool _hasLoggedSuccessfulUnlock;
 		private static KnivesMasterRecipeUnlockPlugin Instance;
 
 		private void Awake()
@@ -44,7 +44,7 @@ namespace FFT.KnivesMaster
 
 		private void Update()
 		{
-			if (_unlockCompleted || Time.unscaledTime < _nextAttemptTime)
+			if (Time.unscaledTime < _nextAttemptTime)
 			{
 				return;
 			}
@@ -55,11 +55,6 @@ namespace FFT.KnivesMaster
 
 		private void TryUnlockRecipes(string source)
 		{
-			if (_unlockCompleted)
-			{
-				return;
-			}
-
 			try
 			{
 				if (!IsKnivesMasterInstalled())
@@ -82,8 +77,16 @@ namespace FFT.KnivesMaster
 					return;
 				}
 
-				_unlockCompleted = true;
-				Logger.LogInfo($"[{source}] Knives Master dagger recipes processed. Matched: {matchedRecipes}, learned now: {learnedRecipes}.");
+				if (learnedRecipes > 0)
+				{
+					_hasLoggedSuccessfulUnlock = true;
+					Logger.LogInfo($"[{source}] Knives Master dagger recipes processed. Matched: {matchedRecipes}, learned now: {learnedRecipes}.");
+				}
+				else if (!_hasLoggedSuccessfulUnlock)
+				{
+					Logger.LogInfo($"[{source}] Knives Master dagger recipes already known. Matched: {matchedRecipes}.");
+					_hasLoggedSuccessfulUnlock = true;
+				}
 			}
 			catch (Exception ex)
 			{

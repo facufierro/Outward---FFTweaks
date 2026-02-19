@@ -200,6 +200,11 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
         New-Item -ItemType Directory -Path $channelBinDir -Force | Out-Null
     }
 
+    $zipPattern = "$author-$modName-*.zip"
+    Get-ChildItem -Path $channelBinDir -Filter $zipPattern -File -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -ne $zipName } |
+        Remove-Item -Force -ErrorAction SilentlyContinue
+
     Write-Host "Zipping to $zipName ..."
     $zipPath = "$channelBinDir\$zipName"
     if (Test-Path $zipPath) {
