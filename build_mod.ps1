@@ -38,11 +38,6 @@ $projects = @(
         Name = "FFT.Classfixes_Part_1"
         ProjectFile = "$solutionDir\FFT.Classfixes_Part_1\FFT.Classfixes_Part_1.csproj"
         DllName = "FFT.Classfixes_Part_1.dll"
-    },
-    @{
-        Name = "FFT.WeaponSkillKeys"
-        ProjectFile = "$solutionDir\FFT.WeaponSkillKeys\FFT.WeaponSkillKeys.csproj"
-        DllName = "FFT.WeaponSkillKeys.dll"
     }
 )
 
