@@ -1,0 +1,10 @@
+{
+  "name": "FFT.WeaponSkillKeys",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "Config-driven skill mapping override patch for Faeryn WeaponSkillKeys.",
+  "dependencies": [
+    "BepInEx-BepInExPack_Outward-5.4.19",
+    "Faeryn-WeaponSkillKeys-1.5.0"
+  ]
+}

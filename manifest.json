@@ -3,11 +3,12 @@
     "name":  "FFTweaks",
     "version_number":  "1.0.0",
     "website_url":  "",
-    "description":  "Compatibility bundle containing FFT.TrueHardcore and FFT.KnivesMaster plugins.",
+    "description":  "Compatibility bundle containing FFT.TrueHardcore, FFT.Knives_Master, FFT.Classfixes_Part_1, and FFT.WeaponSkillKeys plugins.",
     "dependencies":  [
                          "BepInEx-BepInExPack_Outward-5.4.19",
                          "IggyTheMad-TrueHardcore-3.2.1",
                          "stormcancer-Classfixes_Part_1-4.0.2",
+                         "Faeryn-WeaponSkillKeys-1.5.0",
                          "stormcancer-Knives_Master-4.0.6",
                          "Vheos-VheosModPack-2.1.0"
                      ]

@@ -1,0 +1,29 @@
+{
+  "rules": [
+    {
+      "id": "example-disable-all-pistols",
+      "enabled": false,
+      "priority": 200,
+      "action": "disable",
+      "weaponType": 45
+    },
+    {
+      "id": "example-modded-item-by-id",
+      "enabled": false,
+      "priority": 100,
+      "action": "set",
+      "itemId": 123456,
+      "skillId": 8100310
+    },
+    {
+      "id": "example-dual-combo",
+      "enabled": false,
+      "priority": 90,
+      "action": "set",
+      "weaponType": 30,
+      "otherWeaponType": 0,
+      "otherRequiredTags": ["Knife"],
+      "skillId": -23041
+    }
+  ]
+}
