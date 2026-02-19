@@ -20,14 +20,7 @@ namespace FFT.KnivesMaster
 		private static readonly string[] KnivesMasterMarkers =
 		{
 			"daggertoknife",
-			"knifetodagger",
-			"chalcedony dagger",
-			"crescent dagger",
-			"damascene dagger",
-			"fang dagger",
-			"horror dagger",
-			"obsidian dagger",
-			"tsar dagger"
+			"knifetodagger"
 		};
 
 		private float _nextAttemptTime;
@@ -257,9 +250,12 @@ namespace FFT.KnivesMaster
 				return true;
 			}
 
-			bool knivesMasterSignature = normalized.Contains("knivesmaster") || normalized.Contains("stormcancer") || normalized.Contains("colorpickerknife");
-			bool daggerOrKnife = normalized.Contains("dagger") || normalized.Contains("knife");
-			return knivesMasterSignature && daggerOrKnife;
+			bool hasDagger = normalized.Contains("dagger");
+			bool hasKnife = normalized.Contains("knife");
+			bool hasTo = normalized.Contains("to");
+			bool looksLikeConversion = hasDagger && hasKnife && hasTo;
+
+			return looksLikeConversion;
 		}
 
 		private static bool TryLearnRecipe(object localCharacter, string recipeUid, object recipe, Type recipeType)
