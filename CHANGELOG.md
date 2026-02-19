@@ -1,6 +1,7 @@
 # Changelog
 
-## 1.0.0
+## 0.1.0
 
-- Initial release.
-- Added Harmony patch to bypass TrueHardcore's combat loot animation injection.
+- First `FFTweaks` bundled release.
+- Includes `FFT.TrueHardcore.dll` and `FFT.KnivesMaster.dll` in a single package.
+- Added combined build packaging via root `manifest.json`.

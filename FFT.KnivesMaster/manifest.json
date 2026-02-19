@@ -1,0 +1,10 @@
+{
+  "name": "FFT.KnivesMaster",
+  "version_number": "0.1.0",
+  "website_url": "",
+  "description": "Auto-learns Knives Master dagger recipes when a character loads.",
+  "dependencies": [
+    "BepInEx-BepInExPack_Outward-5.4.19",
+    "stormcancer-Knives_Master-1.4.0"
+  ]
+}

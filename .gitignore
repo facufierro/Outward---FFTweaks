@@ -1,1 +1,8 @@
-/bin
+/bin/
+**/bin/
+**/obj/
+
+.vs/
+*.user
+
+FFTweaks.code-workspace

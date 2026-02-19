@@ -1,6 +1,6 @@
 {
   "name": "FFT.TrueHardcore",
-  "version_number": "1.0.0",
+  "version_number": "0.1.0",
   "website_url": "",
   "description": "Disables TrueHardcore combat loot animation injection so other loot-combat mods can handle that behavior.",
   "dependencies": [

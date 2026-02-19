@@ -1,13 +1,26 @@
 $ErrorActionPreference = "Stop"
 
 $solutionDir = "$PSScriptRoot"
-$projectDir = "$solutionDir\FFTweaks.TrueHardcore.Plugin"
 $binDir = "$solutionDir\bin"
-$publishDir = "$projectDir\bin\Debug\publish"
+$publishDir = "$solutionDir\bin\Debug\publish"
 $outwardManagedPath = "D:\Games\Steam\steamapps\common\Outward\Outward_Data\Managed"
+$bepInExCorePath = "c:\Users\fierr\AppData\Roaming\r2modmanPlus-local\OutwardDe\profiles\Classfixes\BepInEx\core"
 
-# Read version from manifest
-$manifestPath = "$projectDir\manifest.json"
+$projects = @(
+    @{
+        Name = "FFT.TrueHardcore"
+        ProjectFile = "$solutionDir\FFT.TrueHardcore\FFT.TrueHardcore.csproj"
+        DllName = "FFT.TrueHardcore.dll"
+    },
+    @{
+        Name = "FFT.KnivesMaster"
+        ProjectFile = "$solutionDir\FFT.KnivesMaster\FFT.KnivesMaster.csproj"
+        DllName = "FFT.KnivesMaster.dll"
+    }
+)
+
+# Read package version from root manifest
+$manifestPath = "$solutionDir\manifest.json"
 if (-not (Test-Path $manifestPath)) {
     Write-Error "manifest.json not found at $manifestPath"
 }
@@ -20,25 +33,33 @@ $zipName = "$author-$modName-$version.zip"
 Write-Host "Cleaning bin and obj folders..."
 Get-ChildItem -Path $solutionDir -Include bin,obj -Recurse | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
 
-Write-Host "Building and Publishing..."
-dotnet publish "$projectDir\FFTweaks.TrueHardcore.Plugin.csproj" -c Debug -o "$publishDir" -p:OutwardManagedPath="$outwardManagedPath"
+Write-Host "Building and publishing projects..."
+foreach ($project in $projects) {
+    Write-Host "Publishing $($project.Name)..."
+    dotnet publish $project.ProjectFile -c Debug -o "$publishDir" -p:OutwardManagedPath="$outwardManagedPath" -p:BepInExCorePath="$bepInExCorePath"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "dotnet publish failed for $($project.Name)"
+    }
+}
 
-Write-Host "Copying Assets..."
+Write-Host "Copying assets..."
 if (-not (Test-Path $publishDir)) {
     New-Item -ItemType Directory -Path $publishDir -Force | Out-Null
 }
-Copy-Item "$projectDir\manifest.json" -Destination $publishDir -Force
+Copy-Item "$solutionDir\manifest.json" -Destination $publishDir -Force
 Copy-Item "$solutionDir\README.md" -Destination $publishDir -Force
 Copy-Item "$solutionDir\CHANGELOG.md" -Destination $publishDir -Force
 
-# Verify DLL exists
-$dllPath = "$publishDir\FFTweaks.TrueHardcore.Plugin.dll"
-if (-not (Test-Path $dllPath)) {
-    Write-Host "Contents of publish dir:"
-    Get-ChildItem $publishDir | Select-Object Name
-    Write-Error "Main DLL not found at $dllPath"
-} else {
-    Write-Host "Found Main DLL at $dllPath"
+Write-Host "Verifying plugin DLLs..."
+foreach ($project in $projects) {
+    $dllPath = "$publishDir\$($project.DllName)"
+    if (-not (Test-Path $dllPath)) {
+        Write-Host "Contents of publish dir:"
+        Get-ChildItem $publishDir | Select-Object Name
+        Write-Error "Main DLL not found at $dllPath"
+    }
+
+    Write-Host "Found DLL at $dllPath"
 }
 
 Write-Host "Preparing output directory..."
@@ -51,4 +72,4 @@ $zipPath = "$binDir\$zipName"
 if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
 Compress-Archive -Path "$publishDir\*" -DestinationPath $zipPath
 
-Write-Host "Build Complete: $zipPath"
+Write-Host "Build complete: $zipPath"
