@@ -1,0 +1,10 @@
+{
+  "name": "FFT.Classfixes_Part_2",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "Texture override persistence patch for stormcancer Classfixes Part 2.",
+  "dependencies": [
+    "BepInEx-BepInExPack_Outward-5.4.19",
+    "stormcancer-Classfixes_Part_2-4.0.2"
+  ]
+}
