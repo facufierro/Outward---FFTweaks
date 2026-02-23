@@ -186,7 +186,6 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
         version_number = $packageVersion
         website_url = $manifest.website_url
         description = $manifest.description
-        icon = $manifest.icon
         dependencies = @($manifest.dependencies)
     }
     $buildManifest | ConvertTo-Json -Depth 10 | Set-Content -Path "$publishDir\manifest.json" -Encoding UTF8
