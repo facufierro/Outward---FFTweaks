@@ -27,6 +27,11 @@ namespace FFT.Classfixes_Part_2
             "-35179_Runic Wind Sword",
             "-35180_Runic Earth Sword"
         };
+        private static readonly string[] CriticalSpiritItemIds =
+        {
+            "-35250_Runic Spirit Mace",
+            "-35251_Runic Spirit Greathammer"
+        };
 
         private int _applyAttempts;
         private float _nextAttemptTime;
@@ -73,11 +78,36 @@ namespace FFT.Classfixes_Part_2
                     return;
                 }
 
+                Logger.LogInfo($"[{source}] Override source root: {sourceRoot}");
                 CleanupLegacySwordTextureOverrides(destinationRoot, source);
+                ForceRefreshCriticalSpiritOverrides(sourceRoot, destinationRoot, source);
 
                 int copied = 0;
+                var skipSourceDirs = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (string sourceFile in Directory.GetFiles(sourceRoot, "*", SearchOption.AllDirectories))
                 {
+                    string sourceDir = Path.GetDirectoryName(sourceFile) ?? string.Empty;
+                    if (skipSourceDirs.Contains(sourceDir))
+                        continue;
+
+                    // If this directory only contains properties (no png textures) and the destination already
+                    // has pngs for the same material, skip copying to avoid wiping the installed textures.
+                    string fileName = Path.GetFileName(sourceFile);
+                    if (string.Equals(fileName, "properties.xml", StringComparison.OrdinalIgnoreCase))
+                    {
+                        bool sourceHasPng = Directory.GetFiles(sourceDir, "*.png").Length > 0;
+                        string relativeDir = sourceDir.Substring(sourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                        string correspondingDestDir = Path.Combine(destinationRoot, relativeDir);
+                        bool destHasPng = Directory.Exists(correspondingDestDir) && Directory.GetFiles(correspondingDestDir, "*.png").Length > 0;
+
+                        if (!sourceHasPng && destHasPng)
+                        {
+                            // Skip this entire source directory
+                            skipSourceDirs.Add(sourceDir);
+                            continue;
+                        }
+                    }
+
                     string relative = sourceFile.Substring(sourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
                     string destinationFile = Path.Combine(destinationRoot, relative);
                     string destinationDir = Path.GetDirectoryName(destinationFile);
@@ -151,6 +181,11 @@ namespace FFT.Classfixes_Part_2
                     return string.Empty;
                 }
 
+                if (Directory.Exists(outputRoot))
+                {
+                    Directory.Delete(outputRoot, true);
+                }
+
                 foreach (string resourceName in resourceNames)
                 {
                     string relative = resourceName.Substring(EmbeddedResourcePrefix.Length)
@@ -212,5 +247,63 @@ namespace FFT.Classfixes_Part_2
                 Logger.LogInfo($"[{source}] Removed {removed} stale non-spirit sword texture override folder(s).");
             }
         }
+
+        private void ForceRefreshCriticalSpiritOverrides(string sourceRoot, string destinationRoot, string source)
+        {
+            int refreshed = 0;
+            foreach (string itemId in CriticalSpiritItemIds)
+            {
+                string sourceItemDir = Path.Combine(sourceRoot, "SideLoader", "Items", itemId);
+                string destinationItemDir = Path.Combine(destinationRoot, "SideLoader", "Items", itemId);
+
+                if (!Directory.Exists(sourceItemDir))
+                {
+                    Logger.LogWarning($"[{source}] Critical source folder missing: {sourceItemDir}");
+                    continue;
+                }
+
+                if (Directory.Exists(destinationItemDir))
+                {
+                    Directory.Delete(destinationItemDir, true);
+                }
+
+                CopyDirectory(sourceItemDir, destinationItemDir);
+
+                int sourceFileCount = Directory.GetFiles(sourceItemDir, "*", SearchOption.AllDirectories).Length;
+                int destinationFileCount = Directory.GetFiles(destinationItemDir, "*", SearchOption.AllDirectories).Length;
+                Logger.LogInfo($"[{source}] Force-refreshed {itemId}: {sourceFileCount} -> {destinationFileCount} file(s)");
+                refreshed++;
+            }
+
+            if (refreshed > 0)
+            {
+                Logger.LogInfo($"[{source}] Force-refreshed {refreshed} critical spirit item folder(s).");
+            }
+        }
+
+        private static void CopyDirectory(string sourceDir, string destinationDir)
+        {
+            Directory.CreateDirectory(destinationDir);
+
+            foreach (string file in Directory.GetFiles(sourceDir))
+            {
+                string fileName = Path.GetFileName(file);
+                string destinationFile = Path.Combine(destinationDir, fileName);
+                File.Copy(file, destinationFile, true);
+            }
+
+            foreach (string directory in Directory.GetDirectories(sourceDir))
+            {
+                string directoryName = Path.GetFileName(directory);
+                if (string.IsNullOrWhiteSpace(directoryName))
+                {
+                    continue;
+                }
+
+                string destinationSubDir = Path.Combine(destinationDir, directoryName);
+                CopyDirectory(directory, destinationSubDir);
+            }
+        }
+
     }
 }
