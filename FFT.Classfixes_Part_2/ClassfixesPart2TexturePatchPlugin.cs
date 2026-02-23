@@ -27,8 +27,24 @@ namespace FFT.Classfixes_Part_2
             "-35179_Runic Wind Sword",
             "-35180_Runic Earth Sword"
         };
-        private static readonly string[] CriticalSpiritItemIds =
+        private static readonly string[] CriticalMaceAndGreathammerItemIds =
         {
+            "-35189_Runic Fire Mace",
+            "-35190_Runic Frost Mace",
+            "-35191_Runic Decay Mace",
+            "-35192_Runic Electric Mace",
+            "-35193_Runic Ethereal Mace",
+            "-35194_Runic Blood Mace",
+            "-35195_Runic Wind Mace",
+            "-35196_Runic Earth Mace",
+            "-35197_Runic Fire Greathammer",
+            "-35198_Runic Frost Greathammer",
+            "-35199_Runic Decay Greathammer",
+            "-35200_Runic Electric Greathammer",
+            "-35201_Runic Ethereal Greathammer",
+            "-35202_Runic Blood Greathammer",
+            "-35203_Runic Wind Greathammer",
+            "-35204_Runic Earth Greathammer",
             "-35250_Runic Spirit Mace",
             "-35251_Runic Spirit Greathammer"
         };
@@ -251,7 +267,7 @@ namespace FFT.Classfixes_Part_2
         private void ForceRefreshCriticalSpiritOverrides(string sourceRoot, string destinationRoot, string source)
         {
             int refreshed = 0;
-            foreach (string itemId in CriticalSpiritItemIds)
+            foreach (string itemId in CriticalMaceAndGreathammerItemIds)
             {
                 string sourceItemDir = Path.Combine(sourceRoot, "SideLoader", "Items", itemId);
                 string destinationItemDir = Path.Combine(destinationRoot, "SideLoader", "Items", itemId);
@@ -277,7 +293,7 @@ namespace FFT.Classfixes_Part_2
 
             if (refreshed > 0)
             {
-                Logger.LogInfo($"[{source}] Force-refreshed {refreshed} critical spirit item folder(s).");
+                Logger.LogInfo($"[{source}] Force-refreshed {refreshed} critical mace/greathammer item folder(s).");
             }
         }
 
