@@ -3,7 +3,6 @@
     "author_name":  "fierrof",
     "name":  "FFTweaks",
     "version_number":  "1.0.0",
-    "icon":  "icon.png",
     "website_url":  "",
     "description":  "Compatibility bundle containing FFT.TrueHardcore, FFT.Knives_Master, FFT.Classfixes_Part_1, and FFT.Classfixes_Part_2 plugins.",
     "dependencies":  [

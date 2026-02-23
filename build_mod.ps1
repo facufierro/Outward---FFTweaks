@@ -118,6 +118,18 @@ function Get-NextDevVersion([string]$releaseVersion) {
     return $nextDevVersion
 }
 
+function Get-Author($manifest) {
+    if ($manifest.author_name -and -not [string]::IsNullOrWhiteSpace($manifest.author_name)) {
+        return $manifest.author_name
+    }
+
+    if ($manifest.author -and -not [string]::IsNullOrWhiteSpace($manifest.author)) {
+        return $manifest.author
+    }
+
+    return "fierrof"
+}
+
 function Ensure-ManifestAuthor($manifest) {
     if ([string]::IsNullOrWhiteSpace($manifest.author_name) -and -not [string]::IsNullOrWhiteSpace($manifest.author)) {
         $manifest | Add-Member -NotePropertyName author_name -NotePropertyValue $manifest.author -Force
@@ -148,7 +160,7 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     }
 
     $modName = $manifest.name
-    $author = $manifest.author_name
+    $author = Get-Author -manifest $manifest
     $zipName = "$author-$modName-$packageVersion.zip"
     $channelBinDir = Join-Path $binDir $channel
 
@@ -190,21 +202,22 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     }
 
     $buildManifest = [PSCustomObject]@{
-        author = $author
-        author_name = $author
         name = $manifest.name
+        author = $(if ($manifest.author) { $manifest.author } else { $author })
         version_number = $packageVersion
         website_url = $manifest.website_url
         description = $manifest.description
-        icon = "icon.png"
         dependencies = @($manifest.dependencies)
     }
     $buildManifest | ConvertTo-Json -Depth 10 | Set-Content -Path "$publishDir\manifest.json" -Encoding UTF8
 
     Copy-Item "$solutionDir\README.md" -Destination $publishDir -Force
     Copy-Item "$solutionDir\CHANGELOG.md" -Destination $publishDir -Force
-    if (Test-Path "$solutionDir\icon.png") {
-        Copy-Item "$solutionDir\icon.png" -Destination $publishDir -Force
+    $iconSource = "$solutionDir\icon.png"
+    if (Test-Path $iconSource) {
+        Copy-Item $iconSource -Destination $publishDir -Force
+    } else {
+        Write-Warning "icon.png not found at $iconSource"
     }
 
     Write-Host "Verifying plugin DLLs..."
