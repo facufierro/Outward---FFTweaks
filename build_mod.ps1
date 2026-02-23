@@ -119,8 +119,17 @@ function Get-NextDevVersion([string]$releaseVersion) {
 }
 
 function Ensure-ManifestAuthor($manifest) {
+    if ([string]::IsNullOrWhiteSpace($manifest.author_name) -and -not [string]::IsNullOrWhiteSpace($manifest.author)) {
+        $manifest | Add-Member -NotePropertyName author_name -NotePropertyValue $manifest.author -Force
+    }
+
+    if ([string]::IsNullOrWhiteSpace($manifest.author)) {
+        $fallback = if (-not [string]::IsNullOrWhiteSpace($manifest.author_name)) { $manifest.author_name } else { "fierrof" }
+        $manifest | Add-Member -NotePropertyName author -NotePropertyValue $fallback -Force
+    }
+
     if ([string]::IsNullOrWhiteSpace($manifest.author_name)) {
-        $manifest | Add-Member -NotePropertyName author_name -NotePropertyValue "fierrof" -Force
+        $manifest | Add-Member -NotePropertyName author_name -NotePropertyValue $manifest.author -Force
     }
 
     return $manifest
@@ -181,11 +190,13 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     }
 
     $buildManifest = [PSCustomObject]@{
+        author = $author
         author_name = $author
         name = $manifest.name
         version_number = $packageVersion
         website_url = $manifest.website_url
         description = $manifest.description
+        icon = "icon.png"
         dependencies = @($manifest.dependencies)
     }
     $buildManifest | ConvertTo-Json -Depth 10 | Set-Content -Path "$publishDir\manifest.json" -Encoding UTF8
