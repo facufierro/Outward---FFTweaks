@@ -186,12 +186,16 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
         version_number = $packageVersion
         website_url = $manifest.website_url
         description = $manifest.description
+        icon = $manifest.icon
         dependencies = @($manifest.dependencies)
     }
     $buildManifest | ConvertTo-Json -Depth 10 | Set-Content -Path "$publishDir\manifest.json" -Encoding UTF8
 
     Copy-Item "$solutionDir\README.md" -Destination $publishDir -Force
     Copy-Item "$solutionDir\CHANGELOG.md" -Destination $publishDir -Force
+    if (Test-Path "$solutionDir\icon.png") {
+        Copy-Item "$solutionDir\icon.png" -Destination $publishDir -Force
+    }
 
     Write-Host "Verifying plugin DLLs..."
     foreach ($project in $projects) {
