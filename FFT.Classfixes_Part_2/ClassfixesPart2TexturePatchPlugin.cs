@@ -16,6 +16,17 @@ namespace FFT.Classfixes_Part_2
         private const float RetryIntervalSeconds = 10f;
         private const int MaxApplyAttempts = 12;
         private const string EmbeddedResourcePrefix = "FFTOverride/";
+        private static readonly string[] NonSpiritSwordItemIds =
+        {
+            "-35173_Runic Fire Sword",
+            "-35174_Runic Frost Sword",
+            "-35175_Runic Decay Sword",
+            "-35176_Runic Electric Sword",
+            "-35177_Runic Ethereal Sword",
+            "-35178_Runic Blood Sword",
+            "-35179_Runic Wind Sword",
+            "-35180_Runic Earth Sword"
+        };
 
         private int _applyAttempts;
         private float _nextAttemptTime;
@@ -61,6 +72,8 @@ namespace FFT.Classfixes_Part_2
                     Logger.LogWarning($"[{source}] Target mod folder not found: {destinationRoot}");
                     return;
                 }
+
+                CleanupLegacySwordTextureOverrides(destinationRoot, source);
 
                 int copied = 0;
                 foreach (string sourceFile in Directory.GetFiles(sourceRoot, "*", SearchOption.AllDirectories))
@@ -176,6 +189,27 @@ namespace FFT.Classfixes_Part_2
             {
                 Logger.LogError($"Failed to extract embedded overrides: {ex.GetType().Name}: {ex.Message}");
                 return string.Empty;
+            }
+        }
+
+        private void CleanupLegacySwordTextureOverrides(string destinationRoot, string source)
+        {
+            int removed = 0;
+            foreach (string itemId in NonSpiritSwordItemIds)
+            {
+                string legacyDir = Path.Combine(destinationRoot, "SideLoader", "Items", itemId, "Textures", "mat_itm_longsword");
+                if (!Directory.Exists(legacyDir))
+                {
+                    continue;
+                }
+
+                Directory.Delete(legacyDir, true);
+                removed++;
+            }
+
+            if (removed > 0)
+            {
+                Logger.LogInfo($"[{source}] Removed {removed} stale non-spirit sword texture override folder(s).");
             }
         }
     }
