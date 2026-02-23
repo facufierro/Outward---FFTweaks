@@ -32,5 +32,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>TextureOverrides\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
     </Content>
+    <EmbeddedResource Include="TextureOverrides\**\*">
+      <LogicalName>FFTOverride/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
