@@ -249,10 +249,41 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
 
     Write-Host "Zipping to $zipName ..."
     $zipPath = "$channelBinDir\$zipName"
+    $packageRootDir = "$binDir\temp\package"
+    $packagePluginsDir = "$packageRootDir\plugins"
+
+    if (Test-Path $packageRootDir) {
+        Remove-Item $packageRootDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
+    New-Item -ItemType Directory -Path $packagePluginsDir -Force | Out-Null
+
+    $metadataFiles = @("manifest.json", "README.md", "CHANGELOG.md", "icon.png")
+
+    foreach ($metadata in $metadataFiles) {
+        $metadataSource = Join-Path $publishDir $metadata
+        if (Test-Path $metadataSource) {
+            Copy-Item $metadataSource -Destination (Join-Path $packageRootDir $metadata) -Force
+        }
+    }
+
+    foreach ($item in Get-ChildItem -Path $publishDir -Force) {
+        if ($metadataFiles -contains $item.Name) {
+            continue
+        }
+
+        $destination = Join-Path $packagePluginsDir $item.Name
+        if ($item.PSIsContainer) {
+            Copy-Item $item.FullName -Destination $destination -Recurse -Force
+        } else {
+            Copy-Item $item.FullName -Destination $destination -Force
+        }
+    }
+
     if (Test-Path $zipPath) {
         Remove-Item $zipPath -Force
     }
-    Compress-Archive -Path "$publishDir\*" -DestinationPath $zipPath
+    Compress-Archive -Path "$packageRootDir\*" -DestinationPath $zipPath
 
     Write-Host "Build complete: $zipPath"
 }
