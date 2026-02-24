@@ -52,6 +52,11 @@ $projects = @(
         Name = "FFT.Classfixes_Part_2"
         ProjectFile = "$solutionDir\FFT.Classfixes_Part_2\FFT.Classfixes_Part_2.csproj"
         DllName = "FFT.Classfixes_Part_2.dll"
+    },
+    @{
+        Name = "FFT.Beard_Additions_Patch"
+        ProjectFile = "$solutionDir\FFT.Beard_Additions_Patch\FFT.Beard_Additions_Patch.csproj"
+        DllName = "FFT.Beard_Additions_Patch.dll"
     }
 )
 

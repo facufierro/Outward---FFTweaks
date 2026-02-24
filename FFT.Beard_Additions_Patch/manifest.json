@@ -1,0 +1,10 @@
+{
+  "name": "FFT.Beard_Additions_Patch",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "Overwrite patch for stormcancer-Beard_Additions files from FFTweaks package into installed plugin folder.",
+  "dependencies": [
+    "BepInEx-BepInExPack_Outward-5.4.19",
+    "stormcancer-Beard_Additions-1.0.2"
+  ]
+}
