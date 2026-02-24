@@ -21,6 +21,7 @@ namespace FFT.Configs
         private float _nextAttemptTime;
         private ConfigEntry<bool> _overrideConfigs;
         private ConfigEntry<string> _overrideNowButton;
+        private ConfigEntry<string> _lastOverrideStatus;
 
         private void Awake()
         {
@@ -72,7 +73,9 @@ namespace FFT.Configs
                 }
 
                 int copied = CopyAllFiles(sourceRoot, destinationRoot);
-                File.WriteAllText(markerPath, $"{PluginVersion}|{DateTime.UtcNow:O}");
+                DateTime nowUtc = DateTime.UtcNow;
+                File.WriteAllText(markerPath, $"{PluginVersion}|{nowUtc:O}");
+                UpdateLastOverrideStatus(nowUtc);
                 Logger.LogInfo($"[{source}] Applied config overrides: {copied} file(s)");
 
                 if (!ignoreMarker)
@@ -83,6 +86,47 @@ namespace FFT.Configs
             catch (Exception ex)
             {
                 Logger.LogError($"[{source}] Failed to apply config overrides: {ex.GetType().Name}: {ex.Message}");
+            }
+        }
+
+        private void UpdateLastOverrideStatus(DateTime utcTimestamp)
+        {
+            if (_lastOverrideStatus == null)
+            {
+                return;
+            }
+
+            _lastOverrideStatus.Value = utcTimestamp.ToString("yyyy-MM-dd HH:mm:ss") + " UTC";
+            Config.Save();
+        }
+
+        private void TryInitializeStatusFromMarker()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Paths.ConfigPath) || !Directory.Exists(Paths.ConfigPath))
+                {
+                    return;
+                }
+
+                string markerPath = GetMarkerPath(Paths.ConfigPath);
+                if (!File.Exists(markerPath))
+                {
+                    return;
+                }
+
+                string markerText = File.ReadAllText(markerPath);
+                string[] parts = markerText.Split('|');
+                if (parts.Length >= 2 && DateTime.TryParse(parts[1], out DateTime parsedUtc))
+                {
+                    UpdateLastOverrideStatus(parsedUtc.ToUniversalTime());
+                    return;
+                }
+
+                UpdateLastOverrideStatus(File.GetLastWriteTimeUtc(markerPath));
+            }
+            catch
+            {
             }
         }
 
@@ -110,6 +154,27 @@ namespace FFT.Configs
                             CustomDrawer = DrawOverrideNowButton
                         }
                     }));
+
+            _lastOverrideStatus = Config.Bind(
+                "Manual Override",
+                "Last Override (UTC)",
+                "Never",
+                new ConfigDescription(
+                    "Timestamp of the last successful config override.",
+                    null,
+                    new object[]
+                    {
+                        new ConfigurationManagerAttributes
+                        {
+                            ReadOnly = true,
+                            Order = 10
+                        }
+                    }));
+
+            if (string.Equals(_lastOverrideStatus.Value, "Never", StringComparison.OrdinalIgnoreCase))
+            {
+                TryInitializeStatusFromMarker();
+            }
         }
 
         private void OnOverrideConfigsChanged(object sender, EventArgs args)
@@ -184,6 +249,8 @@ namespace FFT.Configs
         private sealed class ConfigurationManagerAttributes
         {
             public Action<ConfigEntryBase> CustomDrawer;
+            public bool ReadOnly;
+            public int? Order;
         }
     }
 }
