@@ -12,7 +12,11 @@ param(
 
     [switch]$BuildAfterChange,
 
-    [string]$PluginsRoot = "c:\Users\fierr\AppData\Roaming\r2modmanPlus-local\OutwardDe\profiles\Classfixes\BepInEx\plugins",
+    [string]$PluginsRoot,
+
+    [string]$BepInExCorePath,
+
+    [string]$OutwardManagedPath,
 
     [switch]$SkipDependencySync
 )
@@ -22,8 +26,6 @@ $ErrorActionPreference = "Stop"
 $solutionDir = "$PSScriptRoot"
 $binDir = "$solutionDir\bin"
 $publishDir = "$solutionDir\bin\Debug\publish"
-$outwardManagedPath = "D:\Games\Steam\steamapps\common\Outward\Outward_Data\Managed"
-$bepInExCorePath = "c:\Users\fierr\AppData\Roaming\r2modmanPlus-local\OutwardDe\profiles\Classfixes\BepInEx\core"
 $manifestPath = "$solutionDir\manifest.json"
 $devStatePath = "$solutionDir\.dev-version.json"
 
@@ -34,6 +36,111 @@ $projects = @(
         DllName = "FFTweaks.dll"
     }
 )
+
+function Resolve-BepInExCorePath([string]$value) {
+    if (-not [string]::IsNullOrWhiteSpace($value) -and (Test-Path (Join-Path $value "BepInEx.dll")) -and (Test-Path (Join-Path $value "0Harmony.dll"))) {
+        return $value
+    }
+
+    $envPath = $env:R2MODMAN_BEPINEX_CORE
+    if (-not [string]::IsNullOrWhiteSpace($envPath) -and (Test-Path (Join-Path $envPath "BepInEx.dll")) -and (Test-Path (Join-Path $envPath "0Harmony.dll"))) {
+        return $envPath
+    }
+
+    $profilesRoot = Join-Path $env:APPDATA "r2modmanPlus-local\OutwardDe\profiles"
+    if (Test-Path $profilesRoot) {
+        $candidates = Get-ChildItem -Path $profilesRoot -Directory -ErrorAction SilentlyContinue |
+            ForEach-Object {
+                $corePath = Join-Path $_.FullName "BepInEx\core"
+                if ((Test-Path (Join-Path $corePath "BepInEx.dll")) -and (Test-Path (Join-Path $corePath "0Harmony.dll"))) {
+                    [PSCustomObject]@{
+                        Path = $corePath
+                        LastWriteTime = $_.LastWriteTime
+                    }
+                }
+            } |
+            Where-Object { $_ -ne $null } |
+            Sort-Object LastWriteTime -Descending
+
+        if ($candidates -and $candidates.Count -gt 0) {
+            return $candidates[0].Path
+        }
+    }
+
+    Write-Error "Could not resolve BepInEx core path. Pass -BepInExCorePath or set R2MODMAN_BEPINEX_CORE."
+}
+
+function Resolve-OutwardManagedPath([string]$value) {
+    if (-not [string]::IsNullOrWhiteSpace($value) -and (Test-Path (Join-Path $value "Assembly-CSharp.dll"))) {
+        return $value
+    }
+
+    $envPath = $env:OUTWARD_MANAGED_PATH
+    if (-not [string]::IsNullOrWhiteSpace($envPath) -and (Test-Path (Join-Path $envPath "Assembly-CSharp.dll"))) {
+        return $envPath
+    }
+
+    $candidateRoots = @(
+        "D:\Games\Steam\steamapps\common\Outward",
+        "C:\Program Files (x86)\Steam\steamapps\common\Outward",
+        "C:\Program Files\Steam\steamapps\common\Outward"
+    )
+
+    foreach ($root in $candidateRoots) {
+        $managedCandidates = @(
+            (Join-Path $root "Outward_Data\Managed"),
+            (Join-Path $root "Outward_Defed\Outward Definitive Edition_Data\Managed")
+        )
+
+        foreach ($candidate in $managedCandidates) {
+            if (Test-Path (Join-Path $candidate "Assembly-CSharp.dll")) {
+                return $candidate
+            }
+        }
+    }
+
+    Write-Error "Could not resolve Outward managed path. Pass -OutwardManagedPath or set OUTWARD_MANAGED_PATH."
+}
+
+function Resolve-PluginsRoot([string]$value, [string]$resolvedBepInExCorePath) {
+    if (-not [string]::IsNullOrWhiteSpace($value) -and (Test-Path $value)) {
+        return $value
+    }
+
+    $envPath = $env:R2MODMAN_PLUGINS_ROOT
+    if (-not [string]::IsNullOrWhiteSpace($envPath) -and (Test-Path $envPath)) {
+        return $envPath
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($resolvedBepInExCorePath)) {
+        $fromCore = Join-Path (Split-Path $resolvedBepInExCorePath -Parent) "plugins"
+        if (Test-Path $fromCore) {
+            return $fromCore
+        }
+    }
+
+    $profilesRoot = Join-Path $env:APPDATA "r2modmanPlus-local\OutwardDe\profiles"
+    if (Test-Path $profilesRoot) {
+        $candidates = Get-ChildItem -Path $profilesRoot -Directory -ErrorAction SilentlyContinue |
+            ForEach-Object {
+                $pluginsPath = Join-Path $_.FullName "BepInEx\plugins"
+                if (Test-Path $pluginsPath) {
+                    [PSCustomObject]@{
+                        Path = $pluginsPath
+                        LastWriteTime = $_.LastWriteTime
+                    }
+                }
+            } |
+            Where-Object { $_ -ne $null } |
+            Sort-Object LastWriteTime -Descending
+
+        if ($candidates -and $candidates.Count -gt 0) {
+            return $candidates[0].Path
+        }
+    }
+
+    Write-Error "Could not resolve plugins root. Pass -PluginsRoot or set R2MODMAN_PLUGINS_ROOT."
+}
 
 function Get-Manifest {
     if (-not (Test-Path $manifestPath)) {
@@ -209,10 +316,13 @@ function Get-PluginDependencies([string]$pluginsRoot, [string]$selfAuthor, [stri
 function Sync-ManifestDependencies($manifest) {
     $manifest = Ensure-ManifestAuthor -manifest $manifest
 
+    $resolvedBepInExCorePath = Resolve-BepInExCorePath -value $BepInExCorePath
+    $resolvedPluginsRoot = Resolve-PluginsRoot -value $PluginsRoot -resolvedBepInExCorePath $resolvedBepInExCorePath
+
     $selfAuthor = Get-Author -manifest $manifest
     $selfName = [string]$manifest.name
 
-    $dependencies = Get-PluginDependencies -pluginsRoot $PluginsRoot -selfAuthor $selfAuthor -selfName $selfName
+    $dependencies = Get-PluginDependencies -pluginsRoot $resolvedPluginsRoot -selfAuthor $selfAuthor -selfName $selfName
 
     if (-not ($dependencies -contains "BepInEx-BepInExPack_Outward-5.4.19")) {
         $dependencies = @("BepInEx-BepInExPack_Outward-5.4.19") + $dependencies
@@ -221,7 +331,7 @@ function Sync-ManifestDependencies($manifest) {
     $manifest.dependencies = @($dependencies)
     Save-Manifest -manifest $manifest
 
-    Write-Host "Synced manifest dependencies from: $PluginsRoot"
+    Write-Host "Synced manifest dependencies from: $resolvedPluginsRoot"
     Write-Host "Dependency count: $($manifest.dependencies.Count)"
 
     return Get-Manifest
@@ -237,6 +347,9 @@ function Get-ManifestForBuild($manifest) {
 
 function Invoke-PackageBuild($manifest, [string]$channel) {
     $manifest = Ensure-ManifestAuthor -manifest $manifest
+
+    $resolvedBepInExCorePath = Resolve-BepInExCorePath -value $BepInExCorePath
+    $resolvedOutwardManagedPath = Resolve-OutwardManagedPath -value $OutwardManagedPath
 
     $releaseVersion = $manifest.version_number
     [void](Get-SemVerParts -value $releaseVersion)
@@ -255,6 +368,8 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     Write-Host "Build channel: $channel"
     Write-Host "Release version: $releaseVersion"
     Write-Host "Package version: $packageVersion"
+    Write-Host "BepInEx core: $resolvedBepInExCorePath"
+    Write-Host "Outward managed: $resolvedOutwardManagedPath"
 
     Write-Host "Cleaning bin and obj folders..."
     foreach ($project in $projects) {
@@ -278,7 +393,7 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     Write-Host "Building and publishing projects..."
     foreach ($project in $projects) {
         Write-Host "Publishing $($project.Name)..."
-        dotnet publish $project.ProjectFile -c Debug -o "$publishDir" -p:OutwardManagedPath="$outwardManagedPath" -p:BepInExCorePath="$bepInExCorePath"
+        dotnet publish $project.ProjectFile -c Debug -o "$publishDir" -p:OutwardManagedPath="$resolvedOutwardManagedPath" -p:BepInExCorePath="$resolvedBepInExCorePath"
         if ($LASTEXITCODE -ne 0) {
             Write-Error "dotnet publish failed for $($project.Name)"
         }
