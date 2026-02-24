@@ -29,39 +29,19 @@ $devStatePath = "$solutionDir\.dev-version.json"
 
 $projects = @(
     @{
-        Name = "FFT.TrueHardcore"
-        ProjectFile = "$solutionDir\FFT.TrueHardcore\FFT.TrueHardcore.csproj"
-        DllName = "FFT.TrueHardcore.dll"
-    },
-    @{
-        Name = "FFT.Knives_Master"
-        ProjectFile = "$solutionDir\FFT.Knives_Master\FFT.Knives_Master.csproj"
-        DllName = "FFT.Knives_Master.dll"
-    },
-    @{
-        Name = "FFT.MoreDecraftingRecipes"
-        ProjectFile = "$solutionDir\FFT.MoreDecraftingRecipes\FFT.MoreDecraftingRecipes.csproj"
-        DllName = "FFT.MoreDecraftingRecipes.dll"
-    },
-    @{
-        Name = "FFT.Classfixes_Part_1"
-        ProjectFile = "$solutionDir\FFT.Classfixes_Part_1\FFT.Classfixes_Part_1.csproj"
-        DllName = "FFT.Classfixes_Part_1.dll"
-    },
-    @{
-        Name = "FFT.Classfixes_Part_2"
-        ProjectFile = "$solutionDir\FFT.Classfixes_Part_2\FFT.Classfixes_Part_2.csproj"
-        DllName = "FFT.Classfixes_Part_2.dll"
-    },
-    @{
-        Name = "FFT.Beard_Additions"
-        ProjectFile = "$solutionDir\FFT.Beard_Additions\FFT.Beard_Additions.csproj"
-        DllName = "FFT.Beard_Additions.dll"
-    },
-    @{
         Name = "FFT.Configs"
         ProjectFile = "$solutionDir\FFT.Configs\FFT.Configs.csproj"
         DllName = "FFT.Configs.dll"
+    },
+    @{
+        Name = "FFT.FileReplacer"
+        ProjectFile = "$solutionDir\FFT.FileReplacer\FFT.FileReplacer.csproj"
+        DllName = "FFT.FileReplacer.dll"
+    },
+    @{
+        Name = "FFT.XMLEditor"
+        ProjectFile = "$solutionDir\FFT.XMLEditor\FFT.XMLEditor.csproj"
+        DllName = "FFT.XMLEditor.dll"
     }
 )
 

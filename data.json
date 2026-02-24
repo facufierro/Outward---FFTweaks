@@ -1,0 +1,34 @@
+{
+    "classfixes2": {
+        "files": [
+            [
+                "overrides/Rune_Wu/icon.png",
+                "stormcancer-Classfixes_Part_2/SideLoader/Items/-23285_Rune_ Wu/Textures/icon.png"
+            ],
+            [
+                "overrides/Rune_Wu/skillicon.png",
+                "stormcancer-Classfixes_Part_2/SideLoader/Items/-23285_Rune_ Wu/Textures/skillicon.png"
+            ]
+        ],
+        "xmls": [
+            {
+                "targetPath": "stormcancer-Classfixes_Part_2/SideLoader/Items/-35248_Runic Spirit Sword/-35248_Runic Spirit Sword.xml",
+                "replacements": [
+                    [
+                        "ResourcesPrefabPath",
+                        "Assets/_Prefabs/_ItemsAssets/2000000_Weapons/2000010_IronSword_v"
+                    ],
+                    [
+                        "Position",
+                        
+                        "x = -0.02, y = 0, z = 0"
+                    ],
+                    [
+                        "Rotation",
+                        "x = 0, y = 270, z = 0"
+                    ]
+                ]
+            }
+        ]
+    }
+}
