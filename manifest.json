@@ -2,9 +2,9 @@
     "author":  "fierrof",
     "author_name":  "fierrof",
     "name":  "FFTweaks",
-    "version_number":  "1.0.0",
+    "version_number":  "1.0.1",
     "website_url":  "",
-    "description":  "Compatibility bundle containing FFT.TrueHardcore, FFT.Knives_Master, FFT.Classfixes_Part_1, and FFT.Classfixes_Part_2 plugins.",
+    "description":  "Compatibility patch bundle containing FFT.TrueHardcore, FFT.Knives_Master, FFT.MoreDecraftingRecipes, FFT.Classfixes_Part_1, FFT.Classfixes_Part_2, and FFT.Beard_Additions.",
     "dependencies":  [
                          "BepInEx-BepInExPack_Outward-5.4.19",
                          "ehaugw-CustomMovesetPack-4.0.8",

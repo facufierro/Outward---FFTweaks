@@ -1,37 +1,18 @@
 # FFTweaks
 
-Compatibility and integration package for Outward DE.
+Compatibility patch bundle for Outward DE that keeps your loadout stable by applying targeted fixes and override syncs for your installed mods.
 
-`FFTweaks` bundles custom fixes used in my modpack into a single Thunderstore package.
+## Included patches
 
-## What it does
+- `FFT.TrueHardcore`: keeps TrueHardcore active while removing its combat loot animation injection.
+- `FFT.Knives_Master`: learns the paired dagger/knife conversion recipe when equipping either item.
+- `FFT.MoreDecraftingRecipes`: learns supported arrow decrafting recipes from equipped arrow types.
+- `FFT.Classfixes_Part_1`: recipe unlock and classfix integration patch.
+- `FFT.Classfixes_Part_2`: texture override persistence patch for Classfixes Part 2.
+- `FFT.Beard_Additions`: copies bundled Beard Additions override files into the installed Beard Additions mod folder.
 
-- Ships multiple plugin DLLs in one mod package:
-	- `FFT.TrueHardcore.dll`: keeps TrueHardcore installed and active while disabling only its combat loot animation injection (`SpellCastAnim` calls in its loot interaction patch).
-	- `FFT.Knives_Master.dll`: auto-learns Knives Master dagger recipes when a character loads.
+## Installation
 
-## Included plugins
-
-- `FFT.TrueHardcore.dll`
-- `FFT.Knives_Master.dll`
-- `FFT.Classfixes_Part_1.dll`
-
-## Dependencies
-
-- Dependencies are synchronized from the active profile plugin folder before build.
-- Default source: `c:\Users\fierr\AppData\Roaming\r2modmanPlus-local\OutwardDe\profiles\Classfixes\BepInEx\plugins`
-- To sync without building:
-
-```powershell
-./build_mod.ps1 -Action sync-deps
-```
-
-- To build without syncing (optional):
-
-```powershell
-./build_mod.ps1 -Action build -SkipDependencySync
-```
-
-## Notes
-
-- No direct edits to `HardcoreRebalance.dll` are required.
+1. Install BepInEx for Outward DE.
+2. Install required dependencies.
+3. Extract this package into `BepInEx/plugins`.
