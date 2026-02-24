@@ -14,7 +14,6 @@ namespace FFT.Knives_Master
     [BepInPlugin("fierrof.fft.knives_master", "FFT.Knives_Master", "1.0.0")]
     public class KnivesMasterRecipeUnlockPlugin : BaseUnityPlugin
     {
-        private const bool DebugEnabled = true;
         private static KnivesMasterRecipeUnlockPlugin Instance;
         private static readonly Dictionary<int, string> ItemToRecipeUid = new Dictionary<int, string>();
 
@@ -23,13 +22,10 @@ namespace FFT.Knives_Master
             Instance = this;
             new Harmony("fierrof.fft.knives_master").PatchAll();
             BuildItemToRecipeMap();
-            DebugLog($"Plugin awake. Item->Recipe pairs: {ItemToRecipeUid.Count}");
         }
 
         private void HandleEquip(object characterEquipment, object equippedItem)
         {
-            DebugLog($"HandleEquip fired. equipmentType={characterEquipment?.GetType().FullName ?? "null"}, itemType={equippedItem?.GetType().FullName ?? "null"}");
-
             if (characterEquipment == null || equippedItem == null)
             {
                 return;
@@ -42,7 +38,6 @@ namespace FFT.Knives_Master
             }
 
             int equippedItemId = ParseInt(Read(equippedItem, "ItemID", "m_itemID", "ItemId"));
-            DebugLog($"Equipped item id={equippedItemId}");
             if (equippedItemId == int.MinValue)
             {
                 return;
@@ -50,11 +45,9 @@ namespace FFT.Knives_Master
 
             if (!ItemToRecipeUid.TryGetValue(equippedItemId, out string recipeUid))
             {
-                DebugLog("Stop: equipped item id not mapped to a paired conversion recipe.");
                 return;
             }
 
-            DebugLog($"Mapped item {equippedItemId} -> recipe '{recipeUid}'");
             TryLearnRecipe(character, recipeUid);
         }
 
@@ -64,7 +57,6 @@ namespace FFT.Knives_Master
             object recipeKnowledge = Read(inventory, "RecipeKnowledge");
             if (recipeKnowledge == null)
             {
-                DebugLog("Stop: recipeKnowledge is null.");
                 return;
             }
 
@@ -76,7 +68,6 @@ namespace FFT.Knives_Master
             if (isRecipeLearned != null)
             {
                 object known = isRecipeLearned.Invoke(recipeKnowledge, new object[] { recipeUid });
-                DebugLog($"IsRecipeLearned('{recipeUid}') => {known}");
                 if (known is bool b && b)
                 {
                     return;
@@ -88,12 +79,10 @@ namespace FFT.Knives_Master
                 .FirstOrDefault(type => type.Name == "Recipe");
             if (recipeType == null)
             {
-                DebugLog("Stop: Recipe type not found.");
                 return;
             }
 
             object recipeObject = FindLoadedRecipeByUid(recipeUid, recipeType);
-            DebugLog($"Recipe object resolved for uid '{recipeUid}': {recipeObject != null}");
 
             MethodInfo learnRecipeObject = recipeKnowledge.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .FirstOrDefault(method => method.Name.Equals("LearnRecipe", StringComparison.OrdinalIgnoreCase)
@@ -102,8 +91,7 @@ namespace FFT.Knives_Master
 
             if (learnRecipeObject != null && recipeObject != null)
             {
-                object result = learnRecipeObject.Invoke(recipeKnowledge, new[] { recipeObject });
-                DebugLog($"LearnRecipe(Recipe '{recipeUid}') invoked. Result={result ?? "<null>"}");
+                learnRecipeObject.Invoke(recipeKnowledge, new[] { recipeObject });
                 return;
             }
 
@@ -114,12 +102,8 @@ namespace FFT.Knives_Master
 
             if (learnRecipeString != null)
             {
-                object result = learnRecipeString.Invoke(recipeKnowledge, new object[] { recipeUid });
-                DebugLog($"LearnRecipe(string '{recipeUid}') invoked. Result={result ?? "<null>"}");
-                return;
+                learnRecipeString.Invoke(recipeKnowledge, new object[] { recipeUid });
             }
-
-            DebugLog("Stop: no usable LearnRecipe overload found.");
         }
 
         private static object FindLoadedRecipeByUid(string recipeUid, Type recipeType)
@@ -142,29 +126,22 @@ namespace FFT.Knives_Master
             string recipesDir = FindKnivesRecipesDirectory();
             if (string.IsNullOrWhiteSpace(recipesDir) || !Directory.Exists(recipesDir))
             {
-                DebugLog("Knives recipes directory not found; map is empty.");
                 return;
             }
 
-            DebugLog($"Building map from recipes dir: {recipesDir}");
             List<RecipeMeta> recipes = new List<RecipeMeta>();
-
             foreach (string file in Directory.GetFiles(recipesDir, "*.xml", SearchOption.TopDirectoryOnly))
             {
                 RecipeMeta meta = ParseRecipeMeta(file);
-                if (meta == null)
+                if (meta != null)
                 {
-                    continue;
+                    recipes.Add(meta);
                 }
-
-                recipes.Add(meta);
             }
 
-            var families = recipes
+            foreach (var family in recipes
                 .Where(r => !string.IsNullOrWhiteSpace(r.Family) && r.ResultItemId != int.MinValue)
-                .GroupBy(r => r.Family, StringComparer.OrdinalIgnoreCase);
-
-            foreach (var family in families)
+                .GroupBy(r => r.Family, StringComparer.OrdinalIgnoreCase))
             {
                 RecipeMeta daggerToKnife = family.FirstOrDefault(r => r.Direction == "daggertoknife");
                 RecipeMeta knifeToDagger = family.FirstOrDefault(r => r.Direction == "knifetodagger");
@@ -177,8 +154,6 @@ namespace FFT.Knives_Master
                 ItemToRecipeUid[knifeToDagger.ResultItemId] = daggerToKnife.Uid;
                 ItemToRecipeUid[daggerToKnife.ResultItemId] = knifeToDagger.Uid;
             }
-
-            DebugLog($"Built {ItemToRecipeUid.Count} strict item->recipe mappings.");
         }
 
         private static RecipeMeta ParseRecipeMeta(string file)
@@ -216,9 +191,8 @@ namespace FFT.Knives_Master
                     ResultItemId = resultItemId
                 };
             }
-            catch (Exception ex)
+            catch
             {
-                DebugLog($"Failed to parse recipe xml '{Path.GetFileName(file)}': {ex.GetType().Name}: {ex.Message}");
                 return null;
             }
         }
@@ -246,8 +220,7 @@ namespace FFT.Knives_Master
                 return string.Empty;
             }
 
-            string family = match.Groups["family"].Value.Trim().TrimStart('!');
-            return Normalize(family);
+            return Normalize(match.Groups["family"].Value.Trim().TrimStart('!'));
         }
 
         private static object Read(object instance, params string[] memberNames)
@@ -286,16 +259,6 @@ namespace FFT.Knives_Master
             return new string((value ?? string.Empty).Where(char.IsLetterOrDigit).Select(char.ToLowerInvariant).ToArray());
         }
 
-        private static void DebugLog(string message)
-        {
-            if (!DebugEnabled)
-            {
-                return;
-            }
-
-            Instance?.Logger.LogInfo($"[FFT.Knives_Master][DEBUG] {message}");
-        }
-
         private sealed class RecipeMeta
         {
             public string Uid;
@@ -312,19 +275,12 @@ namespace FFT.Knives_Master
                 Type equipmentType = AccessTools.TypeByName("CharacterEquipment");
                 if (equipmentType == null)
                 {
-                    DebugLog("EquipPatch.TargetMethod: CharacterEquipment type not found.");
                     return null;
                 }
 
                 MethodInfo[] equipCandidates = equipmentType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                     .Where(method => method.Name == "EquipItem")
                     .ToArray();
-
-                foreach (MethodInfo candidate in equipCandidates)
-                {
-                    string signature = string.Join(", ", candidate.GetParameters().Select(p => p.ParameterType.FullName));
-                    DebugLog($"EquipPatch candidate: EquipItem({signature})");
-                }
 
                 MethodInfo selected = equipCandidates.FirstOrDefault(method =>
                 {
@@ -340,20 +296,11 @@ namespace FFT.Knives_Master
                 })
                 ?? equipCandidates.FirstOrDefault();
 
-                if (selected == null)
-                {
-                    DebugLog("EquipPatch.TargetMethod: no selectable EquipItem overload.");
-                    return null;
-                }
-
-                string selectedSignature = string.Join(", ", selected.GetParameters().Select(p => p.ParameterType.FullName));
-                DebugLog($"EquipPatch selected: EquipItem({selectedSignature})");
                 return selected;
             }
 
             private static void Postfix(object __instance, object __0)
             {
-                DebugLog($"EquipPatch.Postfix fired. __instanceType={__instance?.GetType().FullName ?? "null"}, __0Type={__0?.GetType().FullName ?? "null"}");
                 Instance?.HandleEquip(__instance, __0);
             }
         }

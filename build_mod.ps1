@@ -1,5 +1,5 @@
 param(
-    [ValidateSet("build", "bump", "set-version")]
+    [ValidateSet("build", "bump", "set-version", "sync-deps")]
     [string]$Action = "build",
 
     [ValidateSet("dev", "release")]
@@ -10,7 +10,11 @@ param(
 
     [string]$Version,
 
-    [switch]$BuildAfterChange
+    [switch]$BuildAfterChange,
+
+    [string]$PluginsRoot = "c:\Users\fierr\AppData\Roaming\r2modmanPlus-local\OutwardDe\profiles\Classfixes\BepInEx\plugins",
+
+    [switch]$SkipDependencySync
 )
 
 $ErrorActionPreference = "Stop"
@@ -150,6 +154,100 @@ function Ensure-ManifestAuthor($manifest) {
     }
 
     return $manifest
+}
+
+function Get-PluginDependencies([string]$pluginsRoot, [string]$selfAuthor, [string]$selfName) {
+    if (-not (Test-Path $pluginsRoot)) {
+        Write-Warning "PluginsRoot not found: $pluginsRoot"
+        return @()
+    }
+
+    $dependencies = @()
+    $pluginDirs = Get-ChildItem $pluginsRoot -Directory
+
+    foreach ($dir in $pluginDirs) {
+        $folder = $dir.Name
+        if ($folder -eq "$selfAuthor-$selfName") {
+            continue
+        }
+
+        $parts = $folder -split '-', 2
+        $fallbackAuthor = if ($parts.Length -ge 1) { $parts[0] } else { "" }
+        $fallbackName = if ($parts.Length -ge 2) { $parts[1] } else { $folder }
+
+        $manifestCandidate = Join-Path $dir.FullName "manifest.json"
+        $author = ""
+        $name = ""
+        $version = ""
+
+        if (Test-Path $manifestCandidate) {
+            try {
+                $pluginManifest = Get-Content $manifestCandidate -Raw | ConvertFrom-Json
+
+                if ($pluginManifest.PSObject.Properties.Name -contains "author" -and $pluginManifest.author) {
+                    $author = [string]$pluginManifest.author
+                } elseif ($pluginManifest.PSObject.Properties.Name -contains "author_name" -and $pluginManifest.author_name) {
+                    $author = [string]$pluginManifest.author_name
+                }
+
+                if ($pluginManifest.PSObject.Properties.Name -contains "name" -and $pluginManifest.name) {
+                    $name = [string]$pluginManifest.name
+                }
+
+                if ($pluginManifest.PSObject.Properties.Name -contains "version_number" -and $pluginManifest.version_number) {
+                    $version = [string]$pluginManifest.version_number
+                }
+            } catch {
+                Write-Warning "Failed to parse plugin manifest: $manifestCandidate"
+            }
+        }
+
+        if ([string]::IsNullOrWhiteSpace($author)) {
+            $author = $fallbackAuthor
+        }
+        if ([string]::IsNullOrWhiteSpace($name)) {
+            $name = $fallbackName
+        }
+
+        if ([string]::IsNullOrWhiteSpace($version)) {
+            Write-Warning "Skipping plugin '$folder' (missing version_number)"
+            continue
+        }
+
+        $dependencies += "$author-$name-$version"
+    }
+
+    $dependencies = $dependencies | Sort-Object -Unique
+    return @($dependencies)
+}
+
+function Sync-ManifestDependencies($manifest) {
+    $manifest = Ensure-ManifestAuthor -manifest $manifest
+
+    $selfAuthor = Get-Author -manifest $manifest
+    $selfName = [string]$manifest.name
+
+    $dependencies = Get-PluginDependencies -pluginsRoot $PluginsRoot -selfAuthor $selfAuthor -selfName $selfName
+
+    if (-not ($dependencies -contains "BepInEx-BepInExPack_Outward-5.4.19")) {
+        $dependencies = @("BepInEx-BepInExPack_Outward-5.4.19") + $dependencies
+    }
+
+    $manifest.dependencies = @($dependencies)
+    Save-Manifest -manifest $manifest
+
+    Write-Host "Synced manifest dependencies from: $PluginsRoot"
+    Write-Host "Dependency count: $($manifest.dependencies.Count)"
+
+    return Get-Manifest
+}
+
+function Get-ManifestForBuild($manifest) {
+    if ($SkipDependencySync) {
+        return $manifest
+    }
+
+    return Sync-ManifestDependencies -manifest $manifest
 }
 
 function Invoke-PackageBuild($manifest, [string]$channel) {
@@ -293,6 +391,7 @@ $manifest = Ensure-ManifestAuthor -manifest $manifest
 
 switch ($Action) {
     "build" {
+        $manifest = Get-ManifestForBuild -manifest $manifest
         Invoke-PackageBuild -manifest $manifest -channel $Channel
     }
 
@@ -308,6 +407,7 @@ switch ($Action) {
         Write-Host "Manifest version updated: $oldVersion -> $Version"
 
         if ($BuildAfterChange) {
+            $manifest = Get-ManifestForBuild -manifest $manifest
             Invoke-PackageBuild -manifest $manifest -channel $Channel
         }
     }
@@ -320,7 +420,12 @@ switch ($Action) {
         Write-Host "Manifest version bumped ($Bump): $oldVersion -> $newVersion"
 
         if ($BuildAfterChange) {
+            $manifest = Get-ManifestForBuild -manifest $manifest
             Invoke-PackageBuild -manifest $manifest -channel $Channel
         }
+    }
+
+    "sync-deps" {
+        [void](Sync-ManifestDependencies -manifest $manifest)
     }
 }

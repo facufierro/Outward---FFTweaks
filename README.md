@@ -18,10 +18,19 @@ Compatibility and integration package for Outward DE.
 
 ## Dependencies
 
-- `BepInEx-BepInExPack_Outward`
-- `IggyTheMad-TrueHardcore`
-- `stormcancer-Knives_Master`
-- `Vheos-VheosModPack`
+- Dependencies are synchronized from the active profile plugin folder before build.
+- Default source: `c:\Users\fierr\AppData\Roaming\r2modmanPlus-local\OutwardDe\profiles\Classfixes\BepInEx\plugins`
+- To sync without building:
+
+```powershell
+./build_mod.ps1 -Action sync-deps
+```
+
+- To build without syncing (optional):
+
+```powershell
+./build_mod.ps1 -Action build -SkipDependencySync
+```
 
 ## Notes
 
