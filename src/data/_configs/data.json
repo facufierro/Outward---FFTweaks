@@ -2,7 +2,8 @@
     "folders": [
         [
             "data/_configs/_overrides",
-            "config"
+            "config",
+            "once"
         ]
     ]
 }

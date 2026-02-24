@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using BepInEx;
+using FFT.Config;
 using Newtonsoft.Json.Linq;
 
 namespace FFT.FileReplacer
@@ -9,6 +10,13 @@ namespace FFT.FileReplacer
     public class FileReplacerPlugin : BaseUnityPlugin
     {
         private void Awake()
+        {
+            ReplacementControl.Initialize(Info.Location, Logger);
+            ReplacementControl.RefreshRequested += Run;
+            Run();
+        }
+
+        private void Run()
         {
             try
             {
@@ -31,6 +39,8 @@ namespace FFT.FileReplacer
                         {
                             JArray pair = pairToken as JArray;
                             if (pair == null || pair.Count < 2) continue;
+                            bool firstInstallOnly = ReplacementControl.IsFlagEnabled(pair);
+                            if (!ReplacementControl.ShouldApplyFlaggedReplacement(firstInstallOnly)) continue;
 
                             string source = ((string)pair[0] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
                             string target = ((string)pair[1] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);

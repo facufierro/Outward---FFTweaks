@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml.Linq;
 using BepInEx;
+using FFT.Config;
 using Newtonsoft.Json.Linq;
 
 namespace FFT.XMLEditor
@@ -10,6 +11,13 @@ namespace FFT.XMLEditor
     public class XMLEditorPlugin : BaseUnityPlugin
     {
         private void Awake()
+        {
+            ReplacementControl.Initialize(Info.Location, Logger);
+            ReplacementControl.RefreshRequested += Run;
+            Run();
+        }
+
+        private void Run()
         {
             try
             {
@@ -30,6 +38,10 @@ namespace FFT.XMLEditor
                     foreach (JToken xmlPatchToken in xmls)
                     {
                         JObject xmlPatch = xmlPatchToken as JObject;
+                        bool firstInstallOnly = ReplacementControl.IsFlagEnabled(xmlPatch?["once"]);
+
+                        if (!ReplacementControl.ShouldApplyFlaggedReplacement(firstInstallOnly)) continue;
+
                         string targetPathToken = (string)xmlPatch?["targetPath"];
                         if (string.IsNullOrWhiteSpace(targetPathToken)) continue;
 
