@@ -28,12 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="TextureOverrides\**\*">
+    <Content Include="TextureOverrides\stormcancer-Classfixes_Part_2\SideLoader\Items\-23285_Rune_ Wu\Textures\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>TextureOverrides\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+      <TargetPath>TextureOverrides\stormcancer-Classfixes_Part_2\SideLoader\Items\-23285_Rune_ Wu\Textures\icon.png</TargetPath>
     </Content>
-    <EmbeddedResource Include="TextureOverrides\**\*">
-      <LogicalName>FFTOverride/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-    </EmbeddedResource>
   </ItemGroup>
+
 </Project>

@@ -212,11 +212,16 @@ function Get-PluginDependencies([string]$pluginsRoot, [string]$selfAuthor, [stri
             }
         }
 
-        if ([string]::IsNullOrWhiteSpace($author)) {
-            $author = $fallbackAuthor
-        }
         if ([string]::IsNullOrWhiteSpace($name)) {
             $name = $fallbackName
+        }
+
+        if ([string]::IsNullOrWhiteSpace($author)) {
+            if (-not [string]::IsNullOrWhiteSpace($name) -and $folder.EndsWith("-$name")) {
+                $author = $folder.Substring(0, $folder.Length - $name.Length - 1)
+            } else {
+                $author = $fallbackAuthor
+            }
         }
 
         if ([string]::IsNullOrWhiteSpace($version)) {
