@@ -1,7 +1,7 @@
 {
     "files": [
         [
-            "data/runic_spirit_claymore/icon.png",
+            "data/-35249_Runic Spirit Claymore/icon.png",
             "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/icon.png"
         ],
         [
@@ -19,6 +19,22 @@
         [
             "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_itm_blackSteelWeapons/properties.xml",
             "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_itm_hugeSword/properties.xml"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_env_atlasCommonObjects/_AlphaTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_env_atlasCommonObjects/_BumpMap.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_env_atlasCommonObjects/_MainTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_itm_blackSteelWeapons/properties.xml",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35249_Runic Spirit Claymore/Textures/mat_env_atlasCommonObjects/properties.xml"
         ]
     ],
     "xmls": [
@@ -33,3 +49,4 @@
         }
     ]
 }
+

@@ -1,0 +1,36 @@
+{
+    "files": [
+        [
+            "data/-35252_Runic Spirit Spear/icon.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/icon.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_hugeSword/_AlphaTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_hugeSword/_BumpMap.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_hugeSword/_MainTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_blackSteelWeapons/properties.xml",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/Textures/mat_itm_hugeSword/properties.xml"
+        ]
+    ],
+    "xmls": [
+        {
+            "targetPath": "stormcancer-Classfixes_Part_2/SideLoader/Items/-35252_Runic Spirit Spear/-35252_Runic Spirit Spear.xml",
+            "replacements": [
+                [
+                    "ResourcesPrefabPath",
+                    "Assets/_Prefabs/_ItemsAssets/2000000_Weapons/2130110_IronSpear_v"
+                ]
+            ]
+        }
+    ]
+}
+
