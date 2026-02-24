@@ -35,7 +35,7 @@ namespace FFT.FileReplacer
                             string source = ((string)pair[0] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
                             string target = ((string)pair[1] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
                             string sourcePath = ResolveSourcePath(source, dataRoot, pluginDir, jsonDir);
-                            string targetPath = Path.IsPathRooted(target) ? target : Path.Combine(Paths.PluginPath, target);
+                            string targetPath = ResolveTargetPath(target);
                             if (!File.Exists(sourcePath)) continue;
 
                             string targetDir = Path.GetDirectoryName(targetPath);
@@ -113,6 +113,24 @@ namespace FFT.FileReplacer
             }
 
             return Path.Combine(Paths.PluginPath, normalized);
+        }
+
+        private static string ResolveTargetPath(string target)
+        {
+            if (Path.IsPathRooted(target))
+            {
+                return target;
+            }
+
+            string normalized = target.Replace('/', Path.DirectorySeparatorChar);
+            string bepInExRoot = Directory.GetParent(Paths.PluginPath)?.FullName ?? Paths.PluginPath;
+
+            if (normalized.StartsWith("plugins" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            {
+                return Path.Combine(bepInExRoot, normalized);
+            }
+
+            return Path.Combine(bepInExRoot, "plugins", normalized);
         }
     }
 }

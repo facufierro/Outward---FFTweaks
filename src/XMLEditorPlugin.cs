@@ -34,7 +34,7 @@ namespace FFT.XMLEditor
                         if (string.IsNullOrWhiteSpace(targetPathToken)) continue;
 
                         string target = targetPathToken.Replace('/', Path.DirectorySeparatorChar);
-                        string xmlPath = Path.IsPathRooted(target) ? target : Path.Combine(Paths.PluginPath, target);
+                        string xmlPath = ResolveTargetPath(target);
                         if (!File.Exists(xmlPath)) continue;
 
                         XDocument xml = XDocument.Load(xmlPath, LoadOptions.PreserveWhitespace);
@@ -96,6 +96,24 @@ namespace FFT.XMLEditor
             {
                 Logger.LogError(ex);
             }
+        }
+
+        private static string ResolveTargetPath(string target)
+        {
+            if (Path.IsPathRooted(target))
+            {
+                return target;
+            }
+
+            string normalized = target.Replace('/', Path.DirectorySeparatorChar);
+            string bepInExRoot = Directory.GetParent(Paths.PluginPath)?.FullName ?? Paths.PluginPath;
+
+            if (normalized.StartsWith("plugins" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            {
+                return Path.Combine(bepInExRoot, normalized);
+            }
+
+            return Path.Combine(bepInExRoot, "plugins", normalized);
         }
     }
 }

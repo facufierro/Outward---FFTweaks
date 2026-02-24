@@ -1,53 +1,51 @@
 ﻿{
-    "files": [
-        [
-            "data/-35187_Runic Wind Claymore/icon.png",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/icon.png"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/_AlphaTex.png"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/_BumpMap.png"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/_MainTex.png"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/properties.xml",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/properties.xml"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/_AlphaTex.png"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/_BumpMap.png"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/_MainTex.png"
-        ],
-        [
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/properties.xml",
-            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/properties.xml"
-        ]
-    ],
-    "xmls": [
-        {
-            "targetPath": "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/-35187_Runic Wind Claymore.xml",
-            "replacements": [
-                [
-                    "ResourcesPrefabPath",
-                    "Assets/_Prefabs/_ItemsAssets/2000000_Weapons/2100080_IronClaymore_v"
-                ]
-            ]
-        }
-    ]
+    "files":  [
+                  [
+                      "data/-35187_Runic Wind Claymore/icon.png",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/icon.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/_AlphaTex.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/_BumpMap.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/_MainTex.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/properties.xml",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_hugeSword/properties.xml"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/_AlphaTex.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/_BumpMap.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/_MainTex.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_itm_blackSteelWeapons/properties.xml",
+                      "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/Textures/mat_env_atlasCommonObjects/properties.xml"
+                  ]
+              ],
+    "xmls":  [
+                 {
+                     "targetPath":  "plugins/stormcancer-Classfixes_Part_2/SideLoader/Items/-35187_Runic Wind Claymore/-35187_Runic Wind Claymore.xml",
+                     "replacements":  [
+                                          [
+                                              "ResourcesPrefabPath",
+                                              "Assets/_Prefabs/_ItemsAssets/2000000_Weapons/2100080_IronClaymore_v"
+                                          ]
+                                      ]
+                 }
+             ]
 }
-
-
