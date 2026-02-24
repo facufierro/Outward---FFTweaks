@@ -32,9 +32,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\FFT.FileReplacer\FileReplacerPlugin.cs" Link="FileReplacerPlugin.cs" />
+    <Compile Include="..\FFT.XMLEditor\XMLEditorPlugin.cs" Link="XMLEditorPlugin.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="overrides\**\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>overrides\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+    </Content>
+    <Content Include="..\data\**\*">
+      <Link>data\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>data\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
     </Content>
   </ItemGroup>
 </Project>

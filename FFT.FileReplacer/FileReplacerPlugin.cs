@@ -1,6 +1,6 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using BepInEx;
 using Newtonsoft.Json.Linq;
 
@@ -14,39 +14,17 @@ namespace FFT.FileReplacer
             try
             {
                 string pluginDir = Path.GetDirectoryName(Info.Location) ?? string.Empty;
-                string dataPath = Path.Combine(pluginDir, "data.json");
-                if (!File.Exists(dataPath))
+                string dataRoot = Path.Combine(pluginDir, "data");
+                if (!Directory.Exists(dataRoot))
                 {
-                    Logger.LogWarning($"data.json not found: {dataPath}");
+                    Logger.LogWarning($"data folder not found: {dataRoot}");
                     return;
                 }
 
-                JObject root = JObject.Parse(File.ReadAllText(dataPath));
-                Stack<JToken> pending = new Stack<JToken>();
-                pending.Push(root);
-
-                while (pending.Count > 0)
+                foreach (string jsonPath in Directory.GetFiles(dataRoot, "*.json", SearchOption.AllDirectories))
                 {
-                    JToken token = pending.Pop();
-                    if (token is JProperty property)
-                    {
-                        pending.Push(property.Value);
-                        continue;
-                    }
-
-                    if (token is JArray array)
-                    {
-                        foreach (JToken child in array)
-                        {
-                            pending.Push(child);
-                        }
-                        continue;
-                    }
-
-                    JObject node = token as JObject;
-                    if (node == null) continue;
-
-                    JArray files = node["files"] as JArray;
+                    JObject root = JObject.Parse(File.ReadAllText(jsonPath));
+                    JArray files = root["files"] as JArray;
                     if (files != null)
                     {
                         foreach (JToken pairToken in files)
@@ -56,16 +34,7 @@ namespace FFT.FileReplacer
 
                             string source = ((string)pair[0] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
                             string target = ((string)pair[1] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
-                            string sourcePath = Path.IsPathRooted(source) ? source : Path.Combine(pluginDir, source);
-                            if (!Path.IsPathRooted(source) && !File.Exists(sourcePath))
-                            {
-                                string pluginsRootSourcePath = Path.Combine(Paths.PluginPath, source);
-                                if (File.Exists(pluginsRootSourcePath))
-                                {
-                                    sourcePath = pluginsRootSourcePath;
-                                }
-                            }
-
+                            string sourcePath = ResolveSourcePath(source, dataRoot, pluginDir);
                             string targetPath = Path.IsPathRooted(target) ? target : Path.Combine(Paths.PluginPath, target);
                             if (!File.Exists(sourcePath)) continue;
 
@@ -75,17 +44,51 @@ namespace FFT.FileReplacer
                             File.Copy(sourcePath, targetPath, true);
                         }
                     }
-
-                    foreach (JProperty childProperty in node.Properties())
-                    {
-                        pending.Push(childProperty.Value);
-                    }
                 }
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex);
             }
+        }
+
+        private static string ResolveSourcePath(string source, string dataRoot, string pluginDir)
+        {
+            if (Path.IsPathRooted(source))
+            {
+                return source;
+            }
+
+            string normalized = source.Replace('/', Path.DirectorySeparatorChar);
+            if (normalized.StartsWith("_overrides" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            {
+                string fromDataRoot = Path.Combine(dataRoot, normalized);
+                if (File.Exists(fromDataRoot))
+                {
+                    return fromDataRoot;
+                }
+            }
+
+            const string prefix1 = "overrides\\";
+            const string prefix2 = "overrides/";
+
+            if (normalized.StartsWith(prefix1, StringComparison.OrdinalIgnoreCase) || normalized.StartsWith(prefix2, StringComparison.OrdinalIgnoreCase))
+            {
+                string relative = normalized.Substring("overrides".Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                string fromDataOverrides = Path.Combine(dataRoot, "_overrides", relative);
+                if (File.Exists(fromDataOverrides))
+                {
+                    return fromDataOverrides;
+                }
+            }
+
+            string fromPluginDir = Path.Combine(pluginDir, normalized);
+            if (File.Exists(fromPluginDir))
+            {
+                return fromPluginDir;
+            }
+
+            return Path.Combine(Paths.PluginPath, normalized);
         }
     }
 }

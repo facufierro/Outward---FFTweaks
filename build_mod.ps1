@@ -32,16 +32,6 @@ $projects = @(
         Name = "FFT.Configs"
         ProjectFile = "$solutionDir\FFT.Configs\FFT.Configs.csproj"
         DllName = "FFT.Configs.dll"
-    },
-    @{
-        Name = "FFT.FileReplacer"
-        ProjectFile = "$solutionDir\FFT.FileReplacer\FFT.FileReplacer.csproj"
-        DllName = "FFT.FileReplacer.dll"
-    },
-    @{
-        Name = "FFT.XMLEditor"
-        ProjectFile = "$solutionDir\FFT.XMLEditor\FFT.XMLEditor.csproj"
-        DllName = "FFT.XMLEditor.dll"
     }
 )
 
