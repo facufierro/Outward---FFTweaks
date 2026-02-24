@@ -1,11 +1,11 @@
 {
     "files": [
         [
-            "_overrides/rune_wu/icon.png",
+            "data/rune_wu/icon.png",
             "stormcancer-Classfixes_Part_2/SideLoader/Items/-23285_Rune_ Wu/Textures/icon.png"
         ],
         [
-            "_overrides/rune_wu/skillicon.png",
+            "data/rune_wu/skillicon.png",
             "stormcancer-Classfixes_Part_2/SideLoader/Items/-23285_Rune_ Wu/Textures/skillicon.png"
         ]
     ]

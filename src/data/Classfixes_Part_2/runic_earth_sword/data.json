@@ -1,0 +1,43 @@
+﻿{
+    "files":  [
+                  [
+                      "data/runic_earth_sword/icon.png",
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/icon.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_blackSteelWeapons/_DistortMap.png",
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_longsword/_DistortMap.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_longsword/_MainTex.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_blackSteelWeapons/_NormalMap.png",
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_longsword/_NormalMap.png"
+                  ],
+                  [
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_blackSteelWeapons/properties.xml",
+                      "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/Textures/mat_itm_longsword/properties.xml"
+                  ]
+              ],
+    "xmls":  [
+                 {
+                     "targetPath":  "stormcancer-Classfixes_Part_2/SideLoader/Items/-35180_Runic Earth Sword/-35180_Runic Earth Sword.xml",
+                     "replacements":  [
+                                          [
+                                              "ResourcesPrefabPath",
+                                              "Assets/_Prefabs/_ItemsAssets/2000000_Weapons/2000010_IronSword_v"
+                                          ],
+                                          [
+                                              "Position",
+                                              "x = -0.02, y = 0, z = 0"
+                                          ],
+                                          [
+                                              "Rotation",
+                                              "x = 0, y = 270, z = 0"
+                                          ]
+                                      ]
+                 }
+             ]
+}

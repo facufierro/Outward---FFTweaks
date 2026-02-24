@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using BepInEx;
 using Newtonsoft.Json.Linq;
@@ -23,6 +22,7 @@ namespace FFT.FileReplacer
 
                 foreach (string jsonPath in Directory.GetFiles(dataRoot, "*.json", SearchOption.AllDirectories))
                 {
+                    string jsonDir = Path.GetDirectoryName(jsonPath) ?? dataRoot;
                     JObject root = JObject.Parse(File.ReadAllText(jsonPath));
                     JArray files = root["files"] as JArray;
                     if (files != null)
@@ -34,7 +34,7 @@ namespace FFT.FileReplacer
 
                             string source = ((string)pair[0] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
                             string target = ((string)pair[1] ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
-                            string sourcePath = ResolveSourcePath(source, dataRoot, pluginDir);
+                            string sourcePath = ResolveSourcePath(source, dataRoot, pluginDir, jsonDir);
                             string targetPath = Path.IsPathRooted(target) ? target : Path.Combine(Paths.PluginPath, target);
                             if (!File.Exists(sourcePath)) continue;
 
@@ -52,7 +52,7 @@ namespace FFT.FileReplacer
             }
         }
 
-        private static string ResolveSourcePath(string source, string dataRoot, string pluginDir)
+        private static string ResolveSourcePath(string source, string dataRoot, string pluginDir, string jsonDir)
         {
             if (Path.IsPathRooted(source))
             {
@@ -60,6 +60,30 @@ namespace FFT.FileReplacer
             }
 
             string normalized = source.Replace('/', Path.DirectorySeparatorChar);
+
+            const string dataPrefix = "data";
+            if (normalized.StartsWith(dataPrefix + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            {
+                string relativeToData = normalized.Substring(dataPrefix.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+                string fromDataRoot = Path.Combine(dataRoot, relativeToData);
+                if (File.Exists(fromDataRoot))
+                {
+                    return fromDataRoot;
+                }
+
+                string currentJsonFolderName = new DirectoryInfo(jsonDir).Name;
+                if (relativeToData.StartsWith(currentJsonFolderName + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    string relativeToJsonFolder = relativeToData.Substring(currentJsonFolderName.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    string fromJsonFolder = Path.Combine(jsonDir, relativeToJsonFolder);
+                    if (File.Exists(fromJsonFolder))
+                    {
+                        return fromJsonFolder;
+                    }
+                }
+            }
+
             if (normalized.StartsWith("_overrides" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
             {
                 string fromDataRoot = Path.Combine(dataRoot, normalized);

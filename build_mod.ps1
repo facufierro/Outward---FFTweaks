@@ -29,9 +29,9 @@ $devStatePath = "$solutionDir\.dev-version.json"
 
 $projects = @(
     @{
-        Name = "FFT.Configs"
-        ProjectFile = "$solutionDir\FFT.Configs\FFT.Configs.csproj"
-        DllName = "FFT.Configs.dll"
+        Name = "FFTweaks"
+        ProjectFile = "$solutionDir\FFTweaks.csproj"
+        DllName = "FFTweaks.dll"
     }
 )
 

@@ -3,13 +3,14 @@
     <TargetFramework>net472</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
-    <AssemblyName>FFT.XMLEditor</AssemblyName>
-    <RootNamespace>FFT.XMLEditor</RootNamespace>
+    <AssemblyName>FFTweaks</AssemblyName>
+    <RootNamespace>FFTweaks</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
-    <BepInExCorePath Condition="'$(BepInExCorePath)' == ''">$(MSBuildThisFileDirectory)..\..\BepInEx\core</BepInExCorePath>
+    <BepInExCorePath Condition="'$(BepInExCorePath)' == ''">$(MSBuildThisFileDirectory)..\BepInEx\core</BepInExCorePath>
     <OutwardManagedPath Condition="'$(OutwardManagedPath)' == ''">D:\Games\Steam\steamapps\common\Outward\Outward_Data\Managed</OutwardManagedPath>
   </PropertyGroup>
 
@@ -30,5 +31,17 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="src\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="src\data\**\*">
+      <Link>data\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>data\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+    </Content>
   </ItemGroup>
 </Project>

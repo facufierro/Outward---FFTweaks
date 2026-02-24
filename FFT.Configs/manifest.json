@@ -1,9 +1,0 @@
-{
-  "name": "FFT.Configs",
-  "version_number": "1.0.0",
-  "website_url": "",
-  "description": "Copies bundled config overrides into BepInEx config at startup.",
-  "dependencies": [
-    "BepInEx-BepInExPack_Outward-5.4.19"
-  ]
-}
