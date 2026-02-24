@@ -1,0 +1,37 @@
+﻿{
+    "files": [
+        [
+            "data/-35206_Runic Frost Spear/icon.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/icon.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_env_atlasCommonObjects/_AlphaTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_env_atlasCommonObjects/_BumpMap.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_env_atlasCommonObjects/_MainTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_itm_blackSteelWeapons/properties.xml",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/Textures/mat_env_atlasCommonObjects/properties.xml"
+        ]
+    ],
+    "xmls": [
+        {
+            "targetPath": "stormcancer-Classfixes_Part_2/SideLoader/Items/-35206_Runic Frost Spear/-35206_Runic Frost Spear.xml",
+            "replacements": [
+                [
+                    "ResourcesPrefabPath",
+                    "Assets/_Prefabs/_ItemsAssets/2000000_Weapons/2130110_IronSpear_v"
+                ]
+            ]
+        }
+    ]
+}
+
+

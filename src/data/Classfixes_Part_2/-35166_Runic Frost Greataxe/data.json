@@ -1,0 +1,47 @@
+﻿{
+    "files": [
+
+        [
+            "data/-35166_Runic Frost Greataxe/icon.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/icon.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_itm_blackSteelWeapons/_AlphaTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_env_atlasCommonObjects/_AlphaTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_itm_blackSteelWeapons/_BumpMap.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_env_atlasCommonObjects/_BumpMap.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_itm_blackSteelWeapons/_MainTex.png",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_env_atlasCommonObjects/_MainTex.png"
+        ],
+        [
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_itm_blackSteelWeapons/properties.xml",
+            "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/Textures/mat_env_atlasCommonObjects/properties.xml"
+        ]
+    ],
+    "xmls": [
+        {
+            "targetPath": "stormcancer-Classfixes_Part_2/SideLoader/Items/-35166_Runic Frost Greataxe/-35166_Runic Frost Greataxe.xml",
+            "replacements": [
+
+                [
+                    "Target_ItemID",
+                    "2110030"
+                ],
+                [
+                    "ResourcesPrefabPath",
+                    "Assets/_Prefabs/_ItemsAssets/2000000_Weapons/2110030_IronGreataxe_v"
+                ],
+                [
+                    "Position",
+                    "x = 0, y = 0, z = 0"
+                ]
+            ]
+        }
+    ]
+}
+
+
