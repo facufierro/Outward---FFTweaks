@@ -11,13 +11,24 @@ namespace FFT.TrueHardcore
     {
         private const string TrueHardcoreHarmonyId = "com.iggy.hardcorere";
         private const string TargetPrefixType = "HardcoreRebalance.CombatAnims+InteractionTriggerBase_TryActivateBasicAction";
+        private Harmony _harmony;
 
         private void Awake()
         {
+            _harmony = new Harmony("fierrof.fft.truehardcore");
+
+            Type interactionTriggerBaseType = AccessTools.TypeByName("InteractionTriggerBase");
+            Type characterType = AccessTools.TypeByName("Character");
+            if (interactionTriggerBaseType == null || characterType == null)
+            {
+                Logger.LogError("Failed to resolve InteractionTriggerBase or Character type.");
+                return;
+            }
+
             MethodBase target = AccessTools.Method(
-                typeof(InteractionTriggerBase),
+                interactionTriggerBaseType,
                 "TryActivateBasicAction",
-                new[] { typeof(Character), typeof(int) });
+                new[] { characterType, typeof(int) });
 
             if (target == null)
             {
@@ -40,7 +51,7 @@ namespace FFT.TrueHardcore
                     continue;
                 }
 
-                Harmony.UnpatchID(TrueHardcoreHarmonyId, prefix.PatchMethod);
+                _harmony.Unpatch(target, prefix.PatchMethod);
                 removed++;
             }
 

@@ -2,7 +2,7 @@
     "author":  "fierrof",
     "author_name":  "fierrof",
     "name":  "FFTweaks",
-    "version_number":  "1.0.1",
+    "version_number":  "1.0.3",
     "website_url":  "",
     "description":  "Compatibility patch bundle containing FFT.TrueHardcore, FFT.Knives_Master, FFT.MoreDecraftingRecipes, FFT.Classfixes_Part_1, FFT.Classfixes_Part_2, and FFT.Beard_Additions.",
     "dependencies":  [
