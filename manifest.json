@@ -2,8 +2,8 @@
     "author":  "fierrof",
     "author_name":  "fierrof",
     "name":  "FFTweaks",
-    "version_number":  "1.0.3",
-    "website_url":  "",
+    "version_number":  "1.0.4",
+    "website_url":  "https://github.com/facufierro/Outward---FFTweaks",
     "description":  "Compatibility patch bundle containing FFT.TrueHardcore, FFT.Knives_Master, FFT.MoreDecraftingRecipes, FFT.Classfixes_Part_1, FFT.Classfixes_Part_2, and FFT.Beard_Additions.",
     "dependencies":  [
                          "BepInEx-BepInExPack_Outward-5.4.19",

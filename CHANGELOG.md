@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4
+
+- Added repository URL.
+
 ## 1.0.3
 
 - Initial release (Thank you Thunderstore...).
