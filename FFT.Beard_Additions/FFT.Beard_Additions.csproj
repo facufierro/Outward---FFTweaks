@@ -3,8 +3,8 @@
     <TargetFramework>net472</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
-    <AssemblyName>FFT.Beard_Additions_Patch</AssemblyName>
-    <RootNamespace>FFT.Beard_Additions_Patch</RootNamespace>
+    <AssemblyName>FFT.Beard_Additions</AssemblyName>
+    <RootNamespace>FFT.Beard_Additions</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 

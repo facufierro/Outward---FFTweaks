@@ -3,13 +3,13 @@ using System.IO;
 using BepInEx;
 using UnityEngine;
 
-namespace FFT.Beard_Additions_Patch
+namespace FFT.Beard_Additions
 {
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
-    public class BeardAdditionsPatchPlugin : BaseUnityPlugin
+    public class BeardAdditionsPlugin : BaseUnityPlugin
     {
-        private const string PluginGuid = "fierrof.fft.beard_additions_patch";
-        private const string PluginName = "FFT.Beard_Additions_Patch";
+        private const string PluginGuid = "fierrof.fft.beard_additions";
+        private const string PluginName = "FFT.Beard_Additions";
         private const string PluginVersion = "1.0.0";
 
         private const string TargetModFolder = "stormcancer-Beard_Additions";
