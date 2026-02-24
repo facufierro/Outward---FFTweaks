@@ -35,6 +35,11 @@ $projects = @(
         DllName = "FFT.Knives_Master.dll"
     },
     @{
+        Name = "FFT.MoreDecraftingRecipes"
+        ProjectFile = "$solutionDir\FFT.MoreDecraftingRecipes\FFT.MoreDecraftingRecipes.csproj"
+        DllName = "FFT.MoreDecraftingRecipes.dll"
+    },
+    @{
         Name = "FFT.Classfixes_Part_1"
         ProjectFile = "$solutionDir\FFT.Classfixes_Part_1\FFT.Classfixes_Part_1.csproj"
         DllName = "FFT.Classfixes_Part_1.dll"
