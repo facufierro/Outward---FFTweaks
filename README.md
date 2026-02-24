@@ -10,6 +10,7 @@ Compatibility patch bundle for Outward DE that keeps your loadout stable by appl
 - `FFT.Classfixes_Part_1`: recipe unlock and classfix integration patch.
 - `FFT.Classfixes_Part_2`: texture override persistence patch for Classfixes Part 2.
 - `FFT.Beard_Additions`: copies bundled Beard Additions override files into the installed Beard Additions mod folder.
+- `FFT.Configs`: copies bundled config override files into `BepInEx/config` once on first install (then leaves player-edited settings untouched), and adds manual `Override Configs` / `Override Configs Now` controls in Config Manager.
 
 ## Installation
 

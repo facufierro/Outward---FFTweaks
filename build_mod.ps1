@@ -57,6 +57,11 @@ $projects = @(
         Name = "FFT.Beard_Additions"
         ProjectFile = "$solutionDir\FFT.Beard_Additions\FFT.Beard_Additions.csproj"
         DllName = "FFT.Beard_Additions.dll"
+    },
+    @{
+        Name = "FFT.Configs"
+        ProjectFile = "$solutionDir\FFT.Configs\FFT.Configs.csproj"
+        DllName = "FFT.Configs.dll"
     }
 )
 
