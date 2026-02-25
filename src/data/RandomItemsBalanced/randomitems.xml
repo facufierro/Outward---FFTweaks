@@ -1,0 +1,850 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MinNumberOfDropsInc>0</MinNumberOfDropsInc>
+  <MaxNumberOfDropsInc>1</MaxNumberOfDropsInc>
+  <DecreaseChanceForAdd>0.25</DecreaseChanceForAdd>
+  
+  <MinNumberOfDropsInc>0</MinNumberOfDropsInc>
+  <MaxNumberOfDropsInc>2</MaxNumberOfDropsInc>
+  <DecreaseChanceForAdd>0.20</DecreaseChanceForAdd>
+  
+  <MinNumberOfDropsInc>1</MinNumberOfDropsInc>
+  <MaxNumberOfDropsInc>3</MaxNumberOfDropsInc>
+  <DecreaseChanceForAdd>0.15</DecreaseChanceForAdd>
+  
+  <MinNumberOfDropsInc>2</MinNumberOfDropsInc>
+  <MaxNumberOfDropsInc>3</MaxNumberOfDropsInc>
+  <DecreaseChanceForAdd>0.10</DecreaseChanceForAdd>
+  
+  <MinNumberOfDropsInc>3</MinNumberOfDropsInc>
+  <MaxNumberOfDropsInc>5</MaxNumberOfDropsInc>
+  <DecreaseChanceForAdd>0.10</DecreaseChanceForAdd>
+  
+  
+  
+	<Weight>
+   
+        <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+	</Weight>
+	<Durability>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+
+	</Durability>
+	<ColdProtectionModify>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+	
+	</ColdProtectionModify>
+	<ColdProtectionAdd>
+	
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>10</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>5</Min>
+      <Max>15</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+	</ColdProtectionAdd>
+	<HeatProtectionModify>
+	
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+	</HeatProtectionModify>
+	<HeatProtectionAdd>
+	
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>10</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>5</Min>
+      <Max>15</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+	</HeatProtectionAdd>
+	<ImpactResistanceModify>
+    	
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </ImpactResistanceModify>
+    <ImpactResistanceAdd>
+   
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>10</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>5</Min>
+      <Max>15</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </ImpactResistanceAdd>
+    <ManaUseModifierModify>
+   
+        <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </ManaUseModifierModify>
+    <ManaUseModifierAdd>
+   
+        <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>0.95</Max>
+      <Chance>0.10</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>0.85</Max>
+      <Chance>0.10</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>0.75</Max>
+      <Chance>0.10</Chance>
+        </ValueRange>
+	
+    </ManaUseModifierAdd>
+    <PouchCapacityBonusModify>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </PouchCapacityBonusModify>
+    <PouchCapacityBonusAdd>
+   
+        <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.5</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>2.0</Min>
+      <Max>2.5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>3.0</Min>
+      <Max>3.5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>4.0</Min>
+      <Max>5.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </PouchCapacityBonusAdd>
+    <StaminaUsePenaltyModify>
+    
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>0.95</Max>
+      <Chance>0.10</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>0.85</Max>
+      <Chance>0.10</Chance>
+        </ValueRange>
+	
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>0.75</Max>
+      <Chance>0.10</Chance>
+        </ValueRange>
+		
+    </StaminaUsePenaltyModify>
+    <StaminaUsePenaltyAdd>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>-5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>-10</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>-15</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </StaminaUsePenaltyAdd>
+    <MovementPenaltyModify>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </MovementPenaltyModify>
+    <MovementPenaltyAdd>
+    
+	    <ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </MovementPenaltyAdd>
+    <DamageAttackModify>
+   
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </DamageAttackModify>
+    <DamageAttackAdd>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>10</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>5</Min>
+      <Max>15</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </DamageAttackAdd>
+    <DamageResistanceModify>
+    
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </DamageResistanceModify>
+    <DamageResistanceAdd>
+    
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>5</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>0</Min>
+      <Max>10</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>5</Min>
+      <Max>15</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </DamageResistanceAdd>
+    <StamCost>
+   
+        <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+	
+    </StamCost>
+    <Impact>
+  
+        <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+	
+    </Impact>
+    <AttackSpeed>
+   
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </AttackSpeed>
+    <Damage>
+    
+	    <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </Damage>
+    <BagCapacity>
+  
+        <ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.15</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.0</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.1</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+		<ValueRange>
+      <Min>1.0</Min>
+      <Max>1.2</Max>
+      <Chance>0.10</Chance>
+		</ValueRange>
+		
+    </BagCapacity>
+</Config>
