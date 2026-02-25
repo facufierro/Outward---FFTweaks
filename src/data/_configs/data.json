@@ -3,7 +3,27 @@
         [
             "data/_configs/_overrides",
             "config",
-            "once"
+            "once",
+            {
+                "blacklist": [
+                    "data/_configs/_overrides/ActionUI_CharacterSlots",
+                    "data/_configs/_overrides/ActionUI_Keymaps",
+                    "data/_configs/_overrides/gymmed.Mods_Communicator",
+                    "data/_configs/_overrides/sinai-dev SideLoader",
+                    "data/_configs/_overrides/BepInEx.cfg",
+                    "data/_configs/_overrides/gymmed.outward_mods_communicator.cfg",
+                    "data/_configs/_overrides/iggy.customattributes.cfg",
+                    "data/_configs/_overrides/iggy.quests.mod.cfg",
+                    "data/_configs/_overrides/johbenji.bossrush.cfg",
+                    "data/_configs/_overrides/johbenji.npcweapons.cfg",
+                    "data/_configs/_overrides/ModifAmorphic.Outward.ActionUI.cfg",
+                    "data/_configs/_overrides/modifamorphic.outward.respecpotions.cfg",
+                    "data/_configs/_overrides/modifamorphic.outward.transmorphic.enchanting.recipes",
+                    "data/_configs/_overrides/modifamorphic.outward.transmorphic.transmogrify.recipes",
+                    "data/_configs/_overrides/sideloaderextendedeffects.extendedeffects.cfg",
+                    "data/_configs/_overrides/sigilbaram.slowercolds.cfg",
+                ]
+            }
         ]
     ]
 }

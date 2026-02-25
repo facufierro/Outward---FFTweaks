@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using BepInEx;
 using FFT.Config;
@@ -49,8 +50,9 @@ namespace FFT.FolderReplacer
                         string sourceFolder = ResolveSourceFolderPath(source, dataRoot, pluginDir, jsonDir);
                         if (!Directory.Exists(sourceFolder)) continue;
 
+                        string[] blacklist = GetBlacklistEntries(pair, source);
                         string targetFolder = ResolveTargetFolderPath(target);
-                        CopyFolderContents(sourceFolder, targetFolder);
+                        CopyFolderContents(sourceFolder, targetFolder, blacklist);
                     }
                 }
             }
@@ -60,7 +62,7 @@ namespace FFT.FolderReplacer
             }
         }
 
-        private void CopyFolderContents(string sourceFolder, string targetFolder)
+        private void CopyFolderContents(string sourceFolder, string targetFolder, string[] blacklist)
         {
             string[] sourceFiles;
             try
@@ -84,6 +86,11 @@ namespace FFT.FolderReplacer
                     }
 
                     string relativePath = sourceFile.Substring(sourceFolder.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    if (IsBlacklisted(sourceFile, relativePath, blacklist))
+                    {
+                        continue;
+                    }
+
                     string destinationFile = Path.Combine(targetFolder, relativePath);
                     string destinationDir = Path.GetDirectoryName(destinationFile);
                     if (!string.IsNullOrWhiteSpace(destinationDir))
@@ -98,6 +105,104 @@ namespace FFT.FolderReplacer
                     Logger.LogWarning($"Failed to copy '{sourceFile}' into '{targetFolder}': {ex.Message}");
                 }
             }
+        }
+
+        private static string[] GetBlacklistEntries(JArray pair, string source)
+        {
+            List<string> blacklist = new List<string>();
+            string normalizedSource = NormalizeRelativePath(source).TrimEnd(Path.DirectorySeparatorChar);
+
+            foreach (JToken token in pair)
+            {
+                JObject options = token as JObject;
+                if (options == null)
+                {
+                    continue;
+                }
+
+                JArray list = options["blacklist"] as JArray;
+                if (list == null)
+                {
+                    continue;
+                }
+
+                foreach (JToken item in list)
+                {
+                    string raw = (string)item;
+                    if (string.IsNullOrWhiteSpace(raw))
+                    {
+                        continue;
+                    }
+
+                    string normalized = NormalizeRelativePath(raw);
+                    if (Path.IsPathRooted(normalized))
+                    {
+                        blacklist.Add("abs:" + normalized.TrimEnd(Path.DirectorySeparatorChar));
+                        continue;
+                    }
+
+                    string relative = normalized;
+                    if (!string.IsNullOrEmpty(normalizedSource) && normalized.StartsWith(normalizedSource + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                    {
+                        relative = normalized.Substring(normalizedSource.Length).TrimStart(Path.DirectorySeparatorChar);
+                    }
+                    else if (!string.IsNullOrEmpty(normalizedSource) && normalized.Equals(normalizedSource, StringComparison.OrdinalIgnoreCase))
+                    {
+                        relative = string.Empty;
+                    }
+
+                    blacklist.Add(relative.TrimEnd(Path.DirectorySeparatorChar));
+                }
+            }
+
+            return blacklist.ToArray();
+        }
+
+        private static bool IsBlacklisted(string sourceFile, string relativePath, string[] blacklist)
+        {
+            if (blacklist == null || blacklist.Length == 0)
+            {
+                return false;
+            }
+
+            string normalizedSourceFile = NormalizeRelativePath(sourceFile).TrimEnd(Path.DirectorySeparatorChar);
+            string normalizedRelativePath = NormalizeRelativePath(relativePath).TrimEnd(Path.DirectorySeparatorChar);
+
+            foreach (string entry in blacklist)
+            {
+                if (string.IsNullOrWhiteSpace(entry))
+                {
+                    return true;
+                }
+
+                if (entry.StartsWith("abs:", StringComparison.Ordinal))
+                {
+                    string absolute = entry.Substring(4).TrimEnd(Path.DirectorySeparatorChar);
+                    if (normalizedSourceFile.Equals(absolute, StringComparison.OrdinalIgnoreCase) ||
+                        normalizedSourceFile.StartsWith(absolute + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+
+                    continue;
+                }
+
+                string normalizedEntry = entry.TrimEnd(Path.DirectorySeparatorChar);
+                if (normalizedRelativePath.Equals(normalizedEntry, StringComparison.OrdinalIgnoreCase) ||
+                    normalizedRelativePath.StartsWith(normalizedEntry + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static string NormalizeRelativePath(string path)
+        {
+            return (path ?? string.Empty)
+                .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+                .Trim();
         }
 
         private static string ResolveSourceFolderPath(string source, string dataRoot, string pluginDir, string jsonDir)
