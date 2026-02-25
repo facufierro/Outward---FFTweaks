@@ -1,0 +1,22 @@
+{
+    "xmls": [
+        {
+            "targetPath": "plugins/IggyTheMad-TrueHardcore/SideLoader/Items/-2053_TrinketPiece/TrinketPiece.xml",
+            "replacements": [
+                [
+                    "BaseValue",
+                    "30"
+                ]
+            ]
+        },
+        {
+            "targetPath": "plugins/IggyTheMad-TrueHardcore/SideLoader/Items/-2052_ElattsTrinket/ElattsTrinket.xml",
+            "replacements": [
+                [
+                    "BaseValue",
+                    "180"
+                ]
+            ]
+        }
+    ]
+}
