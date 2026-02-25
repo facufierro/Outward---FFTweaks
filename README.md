@@ -1,6 +1,8 @@
 # FFTweaks
 
-This is a carefully assembled modpack built on top of the Vheos Modpack and several other dependencies. It represents many hours of selection, testing, and tuning to arrive at a specific experience: a harder, more unforgiving Outward that still feels fair, is co-op ready, and doesn't drown you in UI clutter.
+This is a carefully assembled modpack built on top of the Vheos Modpack and several other dependencies. It represents many hours of selection, testing, and tuning to arrive at a specific experience: a harder, more unforgiving Outward that still feels fair. 
+
+Co-op ready.
 
 The config overrides are the heart of this pack. They aren't just defaults — they are deliberate choices that define how the game plays.
 
