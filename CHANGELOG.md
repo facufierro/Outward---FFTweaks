@@ -1,7 +1,12 @@
 # Changelog
+## 1.0.6
+- Improved config sync functionality 
+- Readded Enchantment viewer configs
+- Updated dependencies
+
 ## 1.0.5
 
-- Add Beard effects and icons changes from Outhard (with permission)
+- Added Beard effects and icons changes from Outhard (with permission)
   
 ## 1.0.4
 
