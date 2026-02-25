@@ -1,5 +1,8 @@
 # Changelog
+## 1.0.5
 
+- Add Beard effects and icons changes from Outhard (with permission)
+  
 ## 1.0.4
 
 - Added repository URL.
