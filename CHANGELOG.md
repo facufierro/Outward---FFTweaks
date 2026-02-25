@@ -1,4 +1,19 @@
 # Changelog
+
+## 1.0.8
+- Removed respec potions in favor of right click-forget
+- Removed Trainers of Aurai
+- Removed Intro logos
+- Removed MoreDecraftingRecipe Arrows
+- Add RandomItemsBalanced
+- Made beads cheaper so they are worth buying instead of priest blessings for removal at 5+ stacks of Mortality
+- Made trinkets a better option if 8+ stacks of Mortality than Priest's Blessings
+- Fine tuned a many configs
+
+
+## 1.0.7
+- Fix some configs being built into the project that weren't supposed to
+  
 ## 1.0.6
 - Improved config sync functionality 
 - Readded Enchantment viewer configs
