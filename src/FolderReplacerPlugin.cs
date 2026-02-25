@@ -60,19 +60,43 @@ namespace FFT.FolderReplacer
             }
         }
 
-        private static void CopyFolderContents(string sourceFolder, string targetFolder)
+        private void CopyFolderContents(string sourceFolder, string targetFolder)
         {
-            foreach (string sourceFile in Directory.GetFiles(sourceFolder, "*", SearchOption.AllDirectories))
+            string[] sourceFiles;
+            try
             {
-                string relativePath = sourceFile.Substring(sourceFolder.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                string destinationFile = Path.Combine(targetFolder, relativePath);
-                string destinationDir = Path.GetDirectoryName(destinationFile);
-                if (!string.IsNullOrWhiteSpace(destinationDir))
-                {
-                    Directory.CreateDirectory(destinationDir);
-                }
+                sourceFiles = Directory.GetFiles(sourceFolder, "*", SearchOption.AllDirectories);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Failed to enumerate source folder '{sourceFolder}': {ex.Message}");
+                return;
+            }
 
-                File.Copy(sourceFile, destinationFile, true);
+            foreach (string sourceFile in sourceFiles)
+            {
+                try
+                {
+                    if (!File.Exists(sourceFile))
+                    {
+                        Logger.LogWarning($"Skipped missing source file during folder replace: {sourceFile}");
+                        continue;
+                    }
+
+                    string relativePath = sourceFile.Substring(sourceFolder.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    string destinationFile = Path.Combine(targetFolder, relativePath);
+                    string destinationDir = Path.GetDirectoryName(destinationFile);
+                    if (!string.IsNullOrWhiteSpace(destinationDir))
+                    {
+                        Directory.CreateDirectory(destinationDir);
+                    }
+
+                    File.Copy(sourceFile, destinationFile, true);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogWarning($"Failed to copy '{sourceFile}' into '{targetFolder}': {ex.Message}");
+                }
             }
         }
 
