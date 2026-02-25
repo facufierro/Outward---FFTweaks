@@ -121,6 +121,13 @@ function Resolve-PluginsRoot([string]$value, [string]$resolvedBepInExCorePath) {
 
     $profilesRoot = Join-Path $env:APPDATA "r2modmanPlus-local\OutwardDe\profiles"
     if (Test-Path $profilesRoot) {
+        # Prefer a profile whose folder name matches the mod/solution name
+        $modName = (Split-Path $script:solutionDir -Leaf)
+        $preferredPlugins = Join-Path $profilesRoot "$modName\BepInEx\plugins"
+        if (Test-Path $preferredPlugins) {
+            return $preferredPlugins
+        }
+
         $candidates = Get-ChildItem -Path $profilesRoot -Directory -ErrorAction SilentlyContinue |
             ForEach-Object {
                 $pluginsPath = Join-Path $_.FullName "BepInEx\plugins"
