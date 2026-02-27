@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using BepInEx;
 using FFT.Config;
@@ -53,48 +54,74 @@ namespace FFT.XMLEditor
                         bool changed = false;
 
                         JArray replacements = xmlPatch["replacements"] as JArray;
-                        if (replacements == null) continue;
-
-                        foreach (JToken replacementToken in replacements)
+                        if (replacements != null)
                         {
-                            JArray replacement = replacementToken as JArray;
-                            if (replacement == null || replacement.Count < 2) continue;
-                            string key = (string)replacement[0];
-                            string value = (string)replacement[1];
-                            if (string.IsNullOrWhiteSpace(key) || value == null) continue;
-
-                            foreach (XElement element in xml.Descendants())
+                            foreach (JToken replacementToken in replacements)
                             {
-                                bool keyMatches =
-                                    string.Equals((string)element.Attribute("key"), key, StringComparison.OrdinalIgnoreCase) ||
-                                    string.Equals((string)element.Attribute("name"), key, StringComparison.OrdinalIgnoreCase) ||
-                                    string.Equals(element.Name.LocalName, key, StringComparison.OrdinalIgnoreCase);
-                                if (!keyMatches) continue;
+                                JArray replacement = replacementToken as JArray;
+                                if (replacement == null || replacement.Count < 2) continue;
+                                string key = (string)replacement[0];
+                                string value = (string)replacement[1];
+                                if (string.IsNullOrWhiteSpace(key) || value == null) continue;
 
-                                XAttribute valueAttribute = element.Attribute("value");
-                                if (valueAttribute != null)
+                                foreach (XElement element in xml.Descendants())
                                 {
-                                    valueAttribute.Value = value;
-                                    changed = true;
-                                    continue;
+                                    bool keyMatches =
+                                        string.Equals((string)element.Attribute("key"), key, StringComparison.OrdinalIgnoreCase) ||
+                                        string.Equals((string)element.Attribute("name"), key, StringComparison.OrdinalIgnoreCase) ||
+                                        string.Equals(element.Name.LocalName, key, StringComparison.OrdinalIgnoreCase);
+                                    if (!keyMatches) continue;
+
+                                    XAttribute valueAttribute = element.Attribute("value");
+                                    if (valueAttribute != null)
+                                    {
+                                        valueAttribute.Value = value;
+                                        changed = true;
+                                        continue;
+                                    }
+
+                                    bool vectorChanged = false;
+                                    foreach (string part in value.Split(','))
+                                    {
+                                        string[] pair = part.Split('=');
+                                        if (pair.Length != 2) continue;
+                                        XElement child = element.Element(pair[0].Trim());
+                                        if (child == null) continue;
+                                        child.Value = pair[1].Trim();
+                                        vectorChanged = true;
+                                        changed = true;
+                                    }
+                                    if (vectorChanged) continue;
+
+                                    if (!element.HasElements)
+                                    {
+                                        element.Value = value;
+                                        changed = true;
+                                    }
                                 }
+                            }
+                        }
 
-                                bool vectorChanged = false;
-                                foreach (string part in value.Split(','))
-                                {
-                                    string[] pair = part.Split('=');
-                                    if (pair.Length != 2) continue;
-                                    XElement child = element.Element(pair[0].Trim());
-                                    if (child == null) continue;
-                                    child.Value = pair[1].Trim();
-                                    vectorChanged = true;
-                                    changed = true;
-                                }
-                                if (vectorChanged) continue;
+                        JArray additions = xmlPatch["additions"] as JArray;
+                        if (additions != null)
+                        {
+                            foreach (JToken additionToken in additions)
+                            {
+                                JArray addition = additionToken as JArray;
+                                if (addition == null || addition.Count < 2) continue;
+                                string parentName = (string)addition[0];
+                                string rawXml = (string)addition[1];
+                                if (string.IsNullOrWhiteSpace(parentName) || string.IsNullOrWhiteSpace(rawXml)) continue;
 
-                                if (!element.HasElements)
+                                XElement parsed = XElement.Parse(rawXml);
+                                foreach (XElement parent in xml.Descendants()
+                                    .Where(e => string.Equals(e.Name.LocalName, parentName, StringComparison.OrdinalIgnoreCase)))
                                 {
-                                    element.Value = value;
+                                    bool alreadyExists = parent.Elements()
+                                        .Any(e => XNode.DeepEquals(e, parsed));
+                                    if (alreadyExists) continue;
+
+                                    parent.Add(parsed);
                                     changed = true;
                                 }
                             }

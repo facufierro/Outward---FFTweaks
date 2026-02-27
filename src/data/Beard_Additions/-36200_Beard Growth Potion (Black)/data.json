@@ -1,0 +1,70 @@
+{
+    "xmls": [
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/Items/-36200_Beard Growth Potion (Black)/-36200_Beard Growth Potion (Black).xml",
+            "additions": [
+                [
+                    "Effects",
+                    "<SL_Effect xsi:type=\"SL_CreateItemEffect\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Delay>0</Delay><SyncType>Everyone</SyncType><OverrideCategory>None</OverrideCategory><ItemToCreate>-59472</ItemToCreate><Quantity>1</Quantity></SL_Effect>"
+                ]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36200_blackbeard0/blackbeard0 (-36200).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36201_blackbeard1/blackbeard1 (-36201).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36202_blackbeard2/blackbeard2 (-36202).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36203_blackbeard3/blackbeard3 (-36203).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36204_blackbeard4/blackbeard4 (-36204).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36205_blackbeard5/blackbeard5 (-36205).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36206_blackbeard6/blackbeard6 (-36206).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36207_blackbeard7/blackbeard7 (-36207).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        }
+    ]
+}
+

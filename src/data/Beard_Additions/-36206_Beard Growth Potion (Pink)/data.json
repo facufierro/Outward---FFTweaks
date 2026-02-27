@@ -1,0 +1,70 @@
+{
+    "xmls": [
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/Items/-36206_Beard Growth Potion (Pink)/-36206_Beard Growth Potion (Pink).xml",
+            "additions": [
+                [
+                    "Effects",
+                    "<SL_Effect xsi:type=\"SL_CreateItemEffect\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><Delay>0</Delay><SyncType>Everyone</SyncType><OverrideCategory>None</OverrideCategory><ItemToCreate>-59472</ItemToCreate><Quantity>1</Quantity></SL_Effect>"
+                ]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36248_pinkbeard0/pinkbeard0 (-36248).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36249_pinkbeard1/pinkbeard1 (-36249).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36250_pinkbeard2/pinkbeard2 (-36250).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36251_pinkbeard3/pinkbeard3 (-36251).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36252_pinkbeard4/pinkbeard4 (-36252).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36253_pinkbeard5/pinkbeard5 (-36253).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36254_pinkbeard6/pinkbeard6 (-36254).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        },
+        {
+            "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/StatusEffects/-36255_pinkbeard7/pinkbeard7 (-36255).xml",
+            "replacements": [
+                ["DisplayedInHUD", "false"],
+                ["IsHidden", "true"]
+            ]
+        }
+    ]
+}
+
