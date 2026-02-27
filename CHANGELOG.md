@@ -9,6 +9,7 @@
 - Made beads cheaper so they are worth buying instead of priest blessings for removal at 5+ stacks of Mortality
 - Made trinkets a better option if 8+ stacks of Mortality than Priest's Blessings
 - Fine tuned a many configs
+- Added Drink while running
 
 
 ## 1.0.7

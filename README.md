@@ -1,6 +1,6 @@
 # FFTweaks
 
-This is a carefully assembled modpack built on top of the Vheos Modpack and several other dependencies. It represents many hours of selection, testing, and tuning to arrive at a specific experience: a harder, more unforgiving Outward that still feels fair. 
+This is a carefully assembled modpack built on top of the Vheos Modpack Mod, Classfixes series and several other dependencies. It represents many hours of selection, testing, and tuning to arrive at a specific experience: a harder, more unforgiving Outward that still feels fair and varied 
 
 Co-op ready.
 
@@ -20,9 +20,9 @@ The config overrides are the heart of this pack. They aren't just defaults — t
 
 ### Combat and difficulty (Vheos Modpack)
 
-Enemies are smarter and more aggressive out of the box — detection range is tuned up, they re-target when you break line-of-sight, and they hit harder. You also hit them for less. This is intentional: Classfixes significantly increases player power, so the damage output is pulled back to keep fights from being trivialized. Dodge costs more stamina, and breaking enemy stability requires consistent pressure at specific breakpoints rather than just spamming attacks.
+Enemies are smarter and more aggressive out of the box — detection range is tuned up, they re-target when you break line-of-sight, and they hit harder. You also hit them for less. This is intentional: Classfixes significantly increases player power, so the damage output is pulled back to keep fights from being trivialized. Dodge costs more stamina, and breaking enemy stability requires consistent pressure at specific breakpoints rather than just spamming attacks. Attacks can be canceled into a dodge.
 
-**You cannot loot during combat.** This is enforced by Vheos's disallowed-in-combat flag, which is a cleaner solution than TrueHardcore's animation patch (see below).
+**You cannot loot during combat.** This is enforced by Vheos's disallowed-in-combat flag, which is a cleaner solution than TrueHardcore's animation patch (see below). 
 
 ### Crafting knowledge (Vheos Modpack)
 
@@ -30,7 +30,6 @@ Vheos's limited manual crafting is enabled. This means you cannot discover recip
 
 - **Classfixes Part 1** — pistol ↔ handgun conversion recipes
 - **Knives Master** — knife ↔ dagger conversion recipes
-- **More Decrafting Recipes** — arrow decrafting recipes
 
 ### Enemies are information-dark (Combat HUD)
 
@@ -40,7 +39,7 @@ Same goes for the map — enemies and merchant caravans are not shown. You navig
 
 ### TrueHardcore — trimmed down
 
-TrueHardcore is included for its enemy AI improvements and permadeath system. The harsher extras — per-city stashes, night gate locks, enemy healing from player damage — are all turned off. TrueHardcore's loot animation patch is also removed, since Vheos already handles no-looting-in-combat more reliably.
+TrueHardcore is included for its enemy AI improvements and permadeath system. The harsher extras — per-city stashes, night gate locks, enemy healing from player damage — are all turned off. TrueHardcore's loot animation patch is also removed, since Vheos already handles no-looting-in-combat.
 
 ### Co-op (Raid Mode)
 
