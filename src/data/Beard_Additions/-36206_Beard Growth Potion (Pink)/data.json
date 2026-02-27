@@ -1,4 +1,10 @@
 {
+    "files": [
+        [
+            "data/Beard_Additions/-36206_Beard Growth Potion (Pink)/icon.png",
+            "plugins/stormcancer-Beard_Additions/Sideloader/Items/-36206_Beard Growth Potion (Pink)/Textures/icon.png"
+        ]
+    ],
     "xmls": [
         {
             "targetPath": "plugins/stormcancer-Beard_Additions/Sideloader/Items/-36206_Beard Growth Potion (Pink)/-36206_Beard Growth Potion (Pink).xml",
@@ -67,4 +73,3 @@
         }
     ]
 }
-
