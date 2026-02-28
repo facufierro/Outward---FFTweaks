@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 using Newtonsoft.Json.Linq;
@@ -91,10 +90,7 @@ namespace FFT.RecipeUnlocker
                 return;
             }
 
-            MethodInfo isLearned = recipeKnowledge.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .FirstOrDefault(m => m.Name.Equals("IsRecipeLearned", StringComparison.OrdinalIgnoreCase)
-                    && m.GetParameters().Length == 1
-                    && m.GetParameters()[0].ParameterType == typeof(string));
+            var isLearned = AccessTools.Method(recipeKnowledge.GetType(), "IsRecipeLearned", new[] { typeof(string) });
 
             if (isLearned != null)
             {
@@ -105,15 +101,11 @@ namespace FFT.RecipeUnlocker
                 }
             }
 
-            Type recipeType = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(assembly => assembly.GetTypes())
-                .FirstOrDefault(type => type.Name == "Recipe");
+            Type recipeType = AccessTools.TypeByName("Recipe");
 
-            MethodInfo learnRecipeObject = recipeKnowledge.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .FirstOrDefault(m => m.Name.Equals("LearnRecipe", StringComparison.OrdinalIgnoreCase)
-                    && m.GetParameters().Length == 1
-                    && recipeType != null
-                    && m.GetParameters()[0].ParameterType.IsAssignableFrom(recipeType));
+            var learnRecipeObject = recipeType != null
+                ? AccessTools.Method(recipeKnowledge.GetType(), "LearnRecipe", new[] { recipeType })
+                : null;
 
             object recipeObject = FindRecipeByUid(recipeUid, recipeType);
 
@@ -123,10 +115,7 @@ namespace FFT.RecipeUnlocker
                 return;
             }
 
-            MethodInfo learnRecipeString = recipeKnowledge.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .FirstOrDefault(m => m.Name.Equals("LearnRecipe", StringComparison.OrdinalIgnoreCase)
-                    && m.GetParameters().Length == 1
-                    && m.GetParameters()[0].ParameterType == typeof(string));
+            var learnRecipeString = AccessTools.Method(recipeKnowledge.GetType(), "LearnRecipe", new[] { typeof(string) });
 
             if (learnRecipeString != null)
             {
@@ -160,19 +149,19 @@ namespace FFT.RecipeUnlocker
                 return null;
             }
 
-            Type type = instance.GetType();
+            var traverse = Traverse.Create(instance);
             foreach (string memberName in memberNames)
             {
-                PropertyInfo property = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-                if (property != null)
+                var field = traverse.Field(memberName);
+                if (field.FieldExists())
                 {
-                    return property.GetValue(instance);
+                    return field.GetValue();
                 }
 
-                FieldInfo field = type.GetField(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-                if (field != null)
+                var property = traverse.Property(memberName);
+                if (property.PropertyExists())
                 {
-                    return field.GetValue(instance);
+                    return property.GetValue();
                 }
             }
 
@@ -187,7 +176,7 @@ namespace FFT.RecipeUnlocker
         [HarmonyPatch]
         private static class EquipPatch
         {
-            private static MethodBase TargetMethod()
+            private static System.Reflection.MethodBase TargetMethod()
             {
                 Type equipmentType = AccessTools.TypeByName("CharacterEquipment");
                 if (equipmentType == null)
@@ -195,27 +184,25 @@ namespace FFT.RecipeUnlocker
                     return null;
                 }
 
-                MethodInfo[] equipCandidates = equipmentType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                var equipMethods = AccessTools.GetDeclaredMethods(equipmentType)
                     .Where(method => method.Name == "EquipItem")
                     .ToArray();
 
-                MethodInfo preferred = equipCandidates.FirstOrDefault(method =>
+                var preferred = equipMethods.FirstOrDefault(method =>
                 {
-                    ParameterInfo[] parameters = method.GetParameters();
+                    var parameters = method.GetParameters();
                     return parameters.Length == 2
                         && parameters[1].ParameterType == typeof(bool)
                         && string.Equals(parameters[0].ParameterType.Name, "Equipment", StringComparison.Ordinal);
                 });
 
-                MethodInfo selected = preferred
-                    ?? equipCandidates.FirstOrDefault(method =>
+                return preferred
+                    ?? equipMethods.FirstOrDefault(method =>
                     {
-                        ParameterInfo[] parameters = method.GetParameters();
+                        var parameters = method.GetParameters();
                         return parameters.Length == 2 && parameters[1].ParameterType == typeof(bool);
                     })
-                    ?? equipCandidates.FirstOrDefault();
-
-                return selected;
+                    ?? equipMethods.FirstOrDefault();
             }
 
             private static void Postfix(object __instance, object __0)

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.11
+- Removed System reflection and added HarmonyPatch instead
+
 ## 1.0.10
 - Added last Actionbar to dependencies
 
