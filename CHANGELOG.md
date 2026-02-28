@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.9
+- Improved Beards mod config handling
+- Added last Actionbar to dependencies
+
 ## 1.0.8
 - Removed respec potions in favor of right click-forget
 - Removed Trainers of Aurai
