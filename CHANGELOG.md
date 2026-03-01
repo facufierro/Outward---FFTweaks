@@ -1,4 +1,8 @@
 # Changelog
+
+## 1.0.13
+- Refactor manifest to comply whith thundersore requirements
+
 ## 1.0.12
 - Removed HarmonyPatch
 
