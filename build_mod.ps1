@@ -158,7 +158,8 @@ function Get-Manifest {
 }
 
 function Save-Manifest($manifest) {
-    $manifest | ConvertTo-Json -Depth 10 | Set-Content -Path $manifestPath -Encoding UTF8
+    $json = $manifest | ConvertTo-Json -Depth 10
+    [System.IO.File]::WriteAllText($manifestPath, $json, (New-Object System.Text.UTF8Encoding $false))
 }
 
 function Get-SemVerParts([string]$value) {
@@ -216,7 +217,8 @@ function Get-NextDevVersion([string]$releaseVersion) {
         dev_version = $nextDevVersion
         updated_utc = (Get-Date).ToUniversalTime().ToString("o")
     }
-    $nextState | ConvertTo-Json -Depth 5 | Set-Content -Path $devStatePath -Encoding UTF8
+    $json = $nextState | ConvertTo-Json -Depth 5
+    [System.IO.File]::WriteAllText($devStatePath, $json, (New-Object System.Text.UTF8Encoding $false))
 
     return $nextDevVersion
 }
@@ -413,13 +415,13 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
 
     $buildManifest = [PSCustomObject]@{
         name = $manifest.name
-        author = $(if ($manifest.author) { $manifest.author } else { $author })
         version_number = $packageVersion
         website_url = $manifest.website_url
         description = $manifest.description
         dependencies = @($manifest.dependencies)
     }
-    $buildManifest | ConvertTo-Json -Depth 10 | Set-Content -Path "$publishDir\manifest.json" -Encoding UTF8
+    $json = $buildManifest | ConvertTo-Json -Depth 10
+    [System.IO.File]::WriteAllText("$publishDir\manifest.json", $json, (New-Object System.Text.UTF8Encoding $false))
 
     Copy-Item "$solutionDir\README.md" -Destination $publishDir -Force
     Copy-Item "$solutionDir\CHANGELOG.md" -Destination $publishDir -Force
