@@ -2,7 +2,7 @@
     "author":  "fierrof",
     "author_name":  "fierrof",
     "name":  "FFTweaks",
-    "version_number":  "1.0.10",
+    "version_number":  "1.0.12",
     "website_url":  "https://github.com/facufierro/Outward---FFTweaks",
     "description":  "A modpack built on top of the Vheos Modpack. A harder, more unforgiving Outward that still feels fair. Co-op ready.",
     "dependencies":  [

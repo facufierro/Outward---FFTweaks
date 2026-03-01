@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 
@@ -25,7 +24,7 @@ namespace FFT.TrueHardcore
                 return;
             }
 
-            MethodBase target = AccessTools.Method(
+            var target = AccessTools.Method(
                 interactionTriggerBaseType,
                 "TryActivateBasicAction",
                 new[] { characterType, typeof(int) });

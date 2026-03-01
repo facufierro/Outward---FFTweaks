@@ -19,7 +19,50 @@ namespace FFT.RecipeUnlocker
         {
             Instance = this;
             LoadRecipes();
-            new Harmony("fierrof.fft.recipeunlocker").PatchAll();
+            PatchEquipItem(new Harmony("fierrof.fft.recipeunlocker"));
+        }
+
+        private void PatchEquipItem(Harmony harmony)
+        {
+            Type equipmentType = AccessTools.TypeByName("CharacterEquipment");
+            if (equipmentType == null)
+            {
+                Logger.LogWarning("CharacterEquipment type not found; equip patch skipped.");
+                return;
+            }
+
+            var equipMethods = AccessTools.GetDeclaredMethods(equipmentType)
+                .Where(method => method.Name == "EquipItem")
+                .ToArray();
+
+            var preferred = equipMethods.FirstOrDefault(method =>
+            {
+                var parameters = method.GetParameters();
+                return parameters.Length == 2
+                    && parameters[1].ParameterType == typeof(bool)
+                    && string.Equals(parameters[0].ParameterType.Name, "Equipment", StringComparison.Ordinal);
+            });
+
+            var target = preferred
+                ?? equipMethods.FirstOrDefault(method =>
+                {
+                    var parameters = method.GetParameters();
+                    return parameters.Length == 2 && parameters[1].ParameterType == typeof(bool);
+                })
+                ?? equipMethods.FirstOrDefault();
+
+            if (target == null)
+            {
+                Logger.LogWarning("EquipItem method not found; equip patch skipped.");
+                return;
+            }
+
+            harmony.Patch(target, postfix: new HarmonyMethod(AccessTools.Method(typeof(RecipeUnlockerPlugin), nameof(EquipPostfix))));
+        }
+
+        private static void EquipPostfix(object __instance, object __0)
+        {
+            Instance?.HandleEquip(__instance, __0);
         }
 
         private void LoadRecipes()
@@ -173,42 +216,5 @@ namespace FFT.RecipeUnlocker
             return value != null && int.TryParse(value.ToString(), out int parsed) ? parsed : int.MinValue;
         }
 
-        [HarmonyPatch]
-        private static class EquipPatch
-        {
-            private static System.Reflection.MethodBase TargetMethod()
-            {
-                Type equipmentType = AccessTools.TypeByName("CharacterEquipment");
-                if (equipmentType == null)
-                {
-                    return null;
-                }
-
-                var equipMethods = AccessTools.GetDeclaredMethods(equipmentType)
-                    .Where(method => method.Name == "EquipItem")
-                    .ToArray();
-
-                var preferred = equipMethods.FirstOrDefault(method =>
-                {
-                    var parameters = method.GetParameters();
-                    return parameters.Length == 2
-                        && parameters[1].ParameterType == typeof(bool)
-                        && string.Equals(parameters[0].ParameterType.Name, "Equipment", StringComparison.Ordinal);
-                });
-
-                return preferred
-                    ?? equipMethods.FirstOrDefault(method =>
-                    {
-                        var parameters = method.GetParameters();
-                        return parameters.Length == 2 && parameters[1].ParameterType == typeof(bool);
-                    })
-                    ?? equipMethods.FirstOrDefault();
-            }
-
-            private static void Postfix(object __instance, object __0)
-            {
-                Instance?.HandleEquip(__instance, __0);
-            }
-        }
     }
 }

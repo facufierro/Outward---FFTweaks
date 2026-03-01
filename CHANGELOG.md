@@ -1,4 +1,6 @@
 # Changelog
+## 1.0.12
+- Removed HarmonyPatch
 
 ## 1.0.11
 - Removed System reflection and added HarmonyPatch instead
