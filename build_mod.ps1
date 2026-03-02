@@ -236,19 +236,6 @@ function Get-Author($manifest) {
 }
 
 function Ensure-ManifestAuthor($manifest) {
-    if ([string]::IsNullOrWhiteSpace($manifest.author_name) -and -not [string]::IsNullOrWhiteSpace($manifest.author)) {
-        $manifest | Add-Member -NotePropertyName author_name -NotePropertyValue $manifest.author -Force
-    }
-
-    if ([string]::IsNullOrWhiteSpace($manifest.author)) {
-        $fallback = if (-not [string]::IsNullOrWhiteSpace($manifest.author_name)) { $manifest.author_name } else { "fierrof" }
-        $manifest | Add-Member -NotePropertyName author -NotePropertyValue $fallback -Force
-    }
-
-    if ([string]::IsNullOrWhiteSpace($manifest.author_name)) {
-        $manifest | Add-Member -NotePropertyName author_name -NotePropertyValue $manifest.author -Force
-    }
-
     return $manifest
 }
 
@@ -466,6 +453,7 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
     New-Item -ItemType Directory -Path $packagePluginsDir -Force | Out-Null
 
     $metadataFiles = @("manifest.json", "README.md", "CHANGELOG.md", "icon.png")
+    $excludeExtensions = @(".pdb")
 
     foreach ($metadata in $metadataFiles) {
         $metadataSource = Join-Path $publishDir $metadata
@@ -476,6 +464,10 @@ function Invoke-PackageBuild($manifest, [string]$channel) {
 
     foreach ($item in Get-ChildItem -Path $publishDir -Force) {
         if ($metadataFiles -contains $item.Name) {
+            continue
+        }
+
+        if (-not $item.PSIsContainer -and $excludeExtensions -contains $item.Extension) {
             continue
         }
 

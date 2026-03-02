@@ -1,21 +1,40 @@
 # Changelog
 
+
+## 1.0.16
+
+- Updated mod dependencies
+
+## 1.0.15
+
+- Updated mod dependencies
+
+## 1.0.14
+
+- Refactor manifest to comply whith thundersore requirements, again
+
 ## 1.0.13
+
 - Refactor manifest to comply whith thundersore requirements
 
 ## 1.0.12
+
 - Removed HarmonyPatch
 
 ## 1.0.11
+
 - Removed System reflection and added HarmonyPatch instead
 
 ## 1.0.10
+
 - Added last Actionbar to dependencies
 
 ## 1.0.9
+
 - Improved Beards mod config handling
 
 ## 1.0.8
+
 - Removed respec potions in favor of right click-forget
 - Removed Trainers of Aurai
 - Removed Intro logos
@@ -26,19 +45,20 @@
 - Fine tuned a many configs
 - Added Drink while running
 
-
 ## 1.0.7
+
 - Fix some configs being built into the project that weren't supposed to
-  
+
 ## 1.0.6
-- Improved config sync functionality 
+
+- Improved config sync functionality
 - Readded Enchantment viewer configs
 - Updated dependencies
 
 ## 1.0.5
 
 - Added Beard effects and icons changes from Outhard (with permission)
-  
+
 ## 1.0.4
 
 - Added repository URL.
@@ -51,6 +71,6 @@
 - Added automatic unlocks for **arrow decrafting recipes** for More Decrafting Recipes.
 - Added runic weapon model replacement for Classfixes Part 2.
 - Added config override controls:
-	- first install applies safe default config overrides,
-	- optional `once` entries,
-	- manual refresh option if you want to re-apply overrides later.
+  - first install applies safe default config overrides,
+  - optional `once` entries,
+  - manual refresh option if you want to re-apply overrides later.
